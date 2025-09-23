@@ -1,0 +1,65 @@
+# Coding Dynamical Models
+
+## Example 1: The Ricker Model
+
+The Ricker model can be written as follows:
+
+$$
+N_{t} = N_{t-1}e^{r(1-\frac{N_{t-1}}{k})}
+$$
+
+Where:
+
+$N$ is population size;
+
+$r$ is the intrinsic growth rate of the population;
+
+$k$ is the carrying capacity of the population.
+
+The model gives the population size/density, $N$, at time $t$, as a function of the population size/density at time $t-1$.
+
+The Ricker model is a discrete-time model, and can be coded as follows:
+
+```{r}
+r <- 0.1
+k <- 1000
+t <- seq(0, 100, 1)
+N <- c(); N[1] <- 5
+
+for (i in 2:length(t)){
+  N[i] <- N[i-1]*exp(r*(1-(N[i-1]/k)))
+}
+
+plot(N, xlab = "Time", ylab = "Population Abundance (N)", type = "l")
+legend("bottomright", legend = c("r = 0.1"),
+       col = c("black"), lwd = 2)
+```
+
+Notice that the population settles around $N=k$.
+
+Let's play with the intrinsic growth rate, $r$.
+
+```{r}
+r <- c(0.1, 0.2, 0.3, 0.5, 1, 1.1, 1.2, 1.5, 2, 3, 4, 5)
+N_df <- c()
+for (i in 1:length(r)){
+  N <- c(); N[1] <- 5
+  for (j in 2:length(t)){
+    N[j] <- N[j-1]*exp(r[i]*(1-(N[j-1]/k)))
+  }
+  N_df <- cbind(N_df, N)
+}
+
+## Plotting
+col <- c("red4", "red3", "orange1", "gold", "#00CC99", "#009966", "#66CCFF", "#003399", "#330066", "#CC99FF", "#FF99FF", "#CC0066")
+main <- c("r = 0.1", "r = 0.2", "r = 0.3", "r = 0.5", "r = 1.0", "r = 1.1",
+          "r = 1.2", "r = 1.5", "r = 2.0", "r = 3.0", "r = 4.0", "r = 5.0")
+for (i in 1:ncol(N_df)){
+  plot(N_df[ ,i], col = col[i], type = "l", lwd = 2,
+       main = main[i], xlab = "Time", ylab = "Population Abundance (N)")
+}
+```
+
+## Example 2: Rosenzweig-MacArthur Model
+
+## Example 3: MacCall et al., 2019 Model

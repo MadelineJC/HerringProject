@@ -1,0 +1,1316 @@
+---
+title: | 
+  | \vspace{-1.25cm}Supporting information for: Wilson *et al.* 2022. The role of spatial structure in at-risk metapopulation recoveries.
+subtitle: |
+  | In: *Ecological Applications*
+  | **Appendix S1:** Overview of metapopulation model description & detailed results
+author: |
+  | Kyle L. Wilson$^\textup{1,2}$^[Corresponding author - email: klwilson.ccira@gmail.com], Alexandra C. Sawyer$^\textup{1,3}$, Anna Potapova$^\textup{1,4}$, Colin J. Bailey$^\textup{1,5}$,Daniella LoScerbo$^\textup{4,6}$,
+  | Elissa K. Sweeney-Bergen$^\textup{1,7}$, Emma E. Hodgson$^\textup{1,4}$, Kara J. Pitman$^\textup{1}$, Karl M. Seitz$^\textup{1}$,
+  | Lauren Law$^\textup{1,8}$, Luke Warkentin$^\textup{1,9}$, Samantha M. Wilson$^\textup{1}$, William I. Atlas$^\textup{1,10}$, 
+  | Douglas C. Braun$^\textup{4,6}$, Matthew R. Sloat$^\textup{10}$, M. Tim Tinker$^\textup{11}$, 
+  | and Jonathan W. Moore$^\textup{1,6}$
+  |
+  | \small$^\textup{1}$Earth to Ocean Research Group, Simon Fraser University
+  | \small$^\textup{2}$Central Coast Indigenous Resource Alliance, Campbell River, BC
+  | \small$^\textup{3}$Four Peaks Environmental Science & Data Solutions, Seattle, WA
+  | \small$^\textup{4}$Fisheries & Oceans Canada, Cultus Lake Laboratory, Cultus Lake, BC
+  | \small$^\textup{5}$Fisheries & Oceans Canada, Pacific Biological Station, Nanaimo, BC
+  | \small$^\textup{6}$Resource and Environmental Management, Simon Fraser University
+  | \small$^\textup{7}$Ministry of Forests, Lands, Natural Resource Operations, and Rural Development, Smithers, BC
+  | \small$^\textup{8}$Fisheries & Oceans Canada, Salmonid Enhancement Program, Nanaimo, BC
+  | \small$^\textup{9}$Fisheries & Oceans Canada, North Coast Stock Assessment, Smithers, BC
+  | \small$^\textup{10}$Wild Salmon Center, Portland, OR
+  | \small$^\textup{11}$Ecology and Evolutionary Biology, University of California Santa Cruz
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  pdf_document:
+    keep_tex: yes
+    latex_engine: xelatex
+    number_sections: yes
+  highlight: tango
+  html_document:
+  word_document: default
+  df_print: kable
+  toc: true
+  fontsize: 11pt
+  fig_caption: yes
+  number_sections: yes
+  subparagraph: yes
+bibliography: Metapop_references.bib
+csl: conservation-letters.csl
+geometry: margin=0.75in
+filters:
+  - type: bib
+    path: "Markdown/Metapop_references.bib"
+  - type: pandoc-citeproc
+header-includes:
+# - \usepackage{titling}
+# - \setlength{\droptitle}{-2em}
+- \usepackage{setspace}
+- \setcounter{section}{1}
+- \singlespacing
+- \usepackage{wrapfig}
+- \usepackage{lipsum}
+- \usepackage{float}
+- \usepackage{lineno}
+- \usepackage{amsmath}
+- \linenumbers
+- \renewcommand{\thefigure}{S\arabic{figure}}
+- \renewcommand{\thetable}{S\arabic{table}}
+- \renewcommand{\theequation}{S.\arabic{equation}}
+#- \renewcommand{\thesection}{\textbf{\textbf{Section S\arabic{section}}:}}
+
+- \renewcommand{\thesection}{Section S\arabic{section}{:~}}
+- \renewcommand{\thesubsection}{Section S\arabic{section}.\arabic{subsection}{:~}}
+- \renewcommand{\thesubsubsection}{Section S\arabic{section}.\arabic{subsection}.\arabic{subsubsection}{:~}}
+- \usepackage{fancyhdr}
+- \setlength{\parskip}{\baselineskip}
+#- \usepackage[titles]{tocloft}
+- \usepackage{tocloft}
+- \renewcommand{\cftdotsep}{2.10}
+- \setlength{\cftsecnumwidth}{0em}
+- \setlength{\cftsubsecnumwidth}{6em}
+- \setlength{\cftsubsubsecnumwidth}{7em}
+- \setlength{\cftbeforetoctitleskip}{-1.5em}
+#- \renewcommand{\tocloftpagestyle}{fancy}
+#- \renewcommand{\cftbeforesecskip}{12pt}
+#- \setlength{\cftsecnumwidth}{10pt}
+#- \setlength{\cftchapnumwidth}{2em}
+#- \setlength{\cftsecnumwidth}{3em}
+#- \renewcommand{\cftsecnumwidth}{5em}
+#- \setlength{\cftsecindent}{5em}
+- \usepackage{booktabs}
+- \usepackage{makecell}
+- \DeclareMathOperator{\EX}{\mathbb{E}}% expected value
+- \usepackage{dcolumn}
+- \usepackage{titlesec}
+- \titlespacing{\section}{0pt}{0pt plus 1pt minus 1pt}{-5pt plus 1pt minus 1pt}
+- \titlespacing{\subsection}{0pt}{0pt plus 1pt minus 1pt}{-5pt plus 1pt minus 1pt}
+- \titlespacing{\subsubsection}{0pt}{0pt plus 1pt minus 1pt}{-5pt plus 1pt minus 1pt}
+- \titleformat{\section}{\normalfont\Large\bfseries\raggedright}{\thesection}{0em}{}[{\titlerule[1pt]}]
+---
+
+```{r setup, include=FALSE}
+library(distill)
+library(formatR)
+library(knitr)
+#library(kableExtra)
+#library(bibtex)
+library(knitcitations)
+opts_chunk$set(echo=TRUE)
+opts_chunk$set(tidy=TRUE)
+opts_chunk$set(fig.show = "hold", collapse=TRUE)
+knitr::opts_chunk$set(fig.pos = 'H')
+knitr::opts_chunk$set(dev="cairo_pdf")
+#library(devtools)
+#install_github(repo="cboettig/knitcitations")
+cleanbib()
+options("citation_format" = "pandoc")
+#biblio <- read.bibtex(file = "Metapop_references.bib")
+defOut <- knitr::knit_hooks$get("plot")  # save the default plot hook 
+knitr::knit_hooks$set(plot = function(x, options) {  # set new plot hook ...
+  x <- defOut(x, options)  # first apply the default hook
+  if(!is.null(options$wrapfigure)) {  # then, if option wrapfigure is given ...
+    # create the new opening string for the wrapfigure environment ...
+    wf <- sprintf("\\begin{wrapfigure}{%s}{%g\\textwidth}", options$wrapfigure[[1]], options$wrapfigure[[2]])
+    x  <- gsub("\\begin{figure}", wf, x, fixed = T)  # and replace the default one with it.
+    x  <- gsub("{figure}", "{wrapfigure}", x, fixed = T)  # also replace the environment ending
+  }
+  return(x)
+})
+
+options(knitr.table.format = function() {
+  if (knitr::is_latex_output())
+    "latex" else "pipe"
+})
+
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+```
+
+```{r source,echo=FALSE,warning = FALSE, message = FALSE}
+library(mvtnorm)
+library(marima)
+library(diagram)
+library(vioplot)
+library(ggplot2)
+
+source("Functions/make networks.R")
+source("Functions/Dispersal function.R")
+source("Functions/patch_variance.R")
+source("Functions/local disturbance.R")
+source("Functions/some functions.R")
+source("Functions/popDynFn.R")
+source("Functions/Metapop function.R")
+source("Functions/finding MSY.R")
+```
+
+<!-- \centering -->
+<!-- \title{\vspace{-3.0cm}} -->
+\raggedright
+\renewcommand{\baselinestretch}{1}\normalsize
+\tableofcontents
+\renewcommand{\baselinestretch}{0.75}\normalsize
+\newpage
+
+\pagestyle{fancy}
+\fancyhead[LO,LE]{Wilson \textit{et al.}}
+\fancyhead[RO,RE]{\textbf{Appendix S1}: Spatial recoveries in metapopulations}
+
+## Metapopulation model
+### Local & metapopulation dynamics
+Our metapopulation was defined by a set of $P$ local populations for a species with a one year generation time with time-dynamics that follows birth (i.e., recruitment *R*), immigration, death, and emigration processes typical to metapopulation theory and tested the role of multiple local and regional processes [@Anderson2015; @Fullerton2016; @Zelnik2019; @Bowlby2020; @Okamoto2020]:
+
+\begin{align}
+N_{i,t}= (1-d_{i,t})(R_{i,t}+{\sum\limits_{\substack{j=1 \\ j\neq i}}^{P} \omega p_{i,j}R_{j,t}}-\omega R_{i,t})
+\end{align}
+
+where $N_{i,t}$ was the number of adults in patch *i* at time *t*, $R_{i,t}$ was the number of recruits at time *t*, ${\sum\limits_{\substack{j=1 \\ j\neq i}}^{P} \omega p_{i,j}R_{j,t}}$ was the number of recruits immigrating into patch *i* from any other patch, $\omega$ was the proportion of local recruits to disperse, $p_{i,j}$ was a distance-dependent dispersal function, and $d_{i,t}$ was the proportion of post-dispersal recruits lost from the disturbance regime.
+
+Figure S1 shows how local patch recruitment at time *t* depended on adult densities at *t-1* and followed a reparameterized Beverton-Holt function based on compensation ratio [see Box 3.1 in @Walters2004] and ignoring age-structure to model adult-to-adult dynamics, i.e., setting $\phi_{E_{0}}=1$, $\phi_{B_{0}}=1$ and $R_0=N_0$ [see Table 3 in @Forrest2010]:
+
+\begin{align}
+R_{i,t}=\cfrac{\alpha_iN_{i,t-1}}{1+\cfrac{\alpha_i-1}{\beta_i}N_{i,t-1}}\epsilon_{i,t}
+\end{align}
+
+where $\alpha_i$ was the recruitment compensation ratio, $\beta_i$ was local patch carrying capacity, and $\epsilon_{i,t}$ was lognormally distributed deviates to introduce stochastic recruitment dynamics.
+
+Resource monitoring often occurs at the scale of the whole metapopulation by sampling aggregate abundances from multiple local populations to [@Anderson2015;@Moore2021], hence we define metapopulation adults as:
+
+\begin{align}
+{A}_t = \sum_{i=1}^{P} N_{i,t}
+\end{align}
+
+with metapopulation recruits:
+
+\begin{align}
+K_t = \sum_{i=1}^{P} R_{i,t}
+\end{align}
+
+```{r recruitment,echo=FALSE}
+alpha <- c(2,4)
+beta <- c(100,200)
+```
+
+Monitoring at the scale of the whole metapopulation can produce productivity relationships that aggregates the population dynamics and productivity among all local populations. For example, take a two patch metapopulation model (Figure S1) that each vary in demographic shape parameters $\alpha_1=2; \alpha_2=4$ and $\beta_1=100; \beta_2=200$. Here, recruitment compensation from local patches $\alpha_i$ gets averaged across the metapopulation leading to an average compensation ratio $\bar{\alpha}$ of `r mean(alpha)`. Likewise, the total carrying capacity of the metapopulation $\bar{\beta}$ becomes the summation of local patch carrying capacities $\sum\beta_i$, which was `r sum(beta)`. This scale of monitoring generates the following local patch and metapopulation dynamics:
+
+<br>
+```{r recruit curves, echo=FALSE,warning = F, message = F,fig.hold=TRUE,fig.width=4.5, fig.height = 4,fig.cap="Density dependence in metapopulation and local patch recruitment dynamics. Dashed line indicates the line of replacement, with equilbrium indicated by points. When populations fall below equilibrium points, per-capita productivity improves driving populations back towards equilibrium. When populations exceed their capacity, per-capita productivity decreases driving populations back towards equilibrium. At each point of the x-axis, the distance between the solid and dashed lines indicates the amount of recruitment above replacement, i.e., the surplus recruitment produced via compensatory density dependence.",fig.align="center"}
+curve((alpha[1]*x)/(1+((alpha[1]-1)/beta[1])*x),from=0,to=2*beta[1],lwd=2,col="orange",xlab="Adults (t-1)",ylab="Recruits (t)",ylim=1.5*c(0,sum(beta)),xlim=2*c(0,sum(beta)))
+curve((alpha[2]*x)/(1+((alpha[2]-1)/beta[2])*x),from=0,to=2*beta[2],lwd=2,col="dodgerblue",add=TRUE)
+curve((mean(alpha)*x)/(1+((mean(alpha)-1)/sum(beta))*x),from=0,to=2*sum(beta),lwd=2,col="black",add=TRUE)
+abline(b=1,a=0,lty=3,lwd=1.5,col="grey50")
+curvedarrow(from=c(0.4*sum(beta),0.75*sum(beta)),to=c(sum(beta),sum(beta)),lwd=2,lty=1,lcol="black",arr.col="black",curve=-0.1,endhead=TRUE,arr.pos=0.65)
+curvedarrow(from=c(1.8*sum(beta),1.2*sum(beta)),to=c(sum(beta),sum(beta)),lwd=2,lty=1,lcol="black",arr.col="black",curve=0.1,endhead=TRUE,arr.pos=0.65)
+text(x=0.45*sum(beta),y=0.88*sum(beta),"Increased productivity",cex=0.5,srt=30)
+text(x=1.55*sum(beta),y=1.27*sum(beta),"Decreased productivity",cex=0.5,srt=15)
+
+points(c(beta,sum(beta)),c(beta,sum(beta)),pch=21,col="black",bg=c("orange","dodgerblue","grey50"))
+legend("bottomright",c("Patch 1","Patch 2","Metapopulation","Replacement"),bty="n",lwd=1.5,lty=c(1,1,1,3),pch=c(NA,NA,NA,21),col=c("orange","dodgerblue","black","grey50"),pt.bg="grey50",cex=0.8)
+
+```
+<br>
+
+### Creating the spatial networks
+The next aspect to developing our metapopulation model was connecting the set of patches to one another [@Yeakel2014]. We needed to specify the number of patches, their arrangements (i.e., connections), and how far apart they are from one another. We followed some classic metapopulation and source-sink arrangements to create four networks that generalize across a few real-world topologies: a linear habitat network (e.g., coastline), a dendritic or branching network (e.g., coastal rivers), a star network (e.g., mountain & valley, or lake with inlet tributaries), and a grid network (e.g., grasslands). 
+  
+To make networks comparable, each spatial network type needs the same leading parameters (e.g., number of patches $P$ and mean distance between neighboring patches $\bar{d}$). In this case, we set $P$ to `16` and $\bar{d}$ to `1` unit (distance units are arbitrary). We used the `igraph` package [@Csardi2006] to arrange our spatial networks as the following:
+
+<br>
+```{r networks, echo=FALSE,fig.hold=TRUE,fig.width=5, fig.height = 5,fig.cap="Four spatial network topologies.",fig.align="center"}
+source("Functions/some functions.R")
+source("Functions/make networks.R")
+patchDist <- 1
+Npatches <- 16
+layout(matrix(1:4,nrow=2,ncol=2,byrow=T))
+par(mar=c(1,1,1,1),oma=c(0,0,0,0))
+
+nodeScalar <- 16
+network <- makeNetworks("linear",Npatches=Npatches,patchDist=patchDist,colors="grey70")
+plot(network$landscape,col="dodgerblue",layout=cbind(0,seq(1,-1,length.out = gorder(network$landscape))),vertex.size=network$node.size*nodeScalar,xlim=c(-1,1),ylim=c(-1,1),rescale=FALSE)
+title(main="Linear",line=0,font.main=1)
+
+nodeScalar <- 18
+network <- makeNetworks("dendritic",Npatches=Npatches,patchDist=patchDist,colors="grey70")
+plot(network$landscape,col="dodgerblue",layout=layout_as_tree(network$landscape,root=V(network$landscape)[1]),vertex.size=network$node.size*nodeScalar)
+title(main="Dendritic",line=0,font.main=1)
+
+network <- makeNetworks("star",Npatches=Npatches,patchDist=patchDist,colors="grey70")
+plot(network$landscape,col="dodgerblue",layout=layout.reingold.tilford(network$landscape,circular=T),vertex.size=network$node.size*nodeScalar)
+title(main="Star",line=0,font.main=1)
+
+network <- makeNetworks("complex",Npatches=Npatches,patchDist=patchDist,colors="grey70")
+spatialLayout <- matrix(MORELETTERS(1:Npatches),nrow=sqrt(Npatches),ncol=sqrt(Npatches),byrow=TRUE)
+spatialLayout <- t(sapply(1:Npatches,function(x){which(spatialLayout==LETTERS[x],arr.ind=TRUE)}))
+spatialLayout <- spatialLayout[rank(attr(V(network$landscape),"names")),]
+plot(network$landscape,col="dodgerblue",layout=spatialLayout,vertex.size=network$node.size*nodeScalar)
+title(main="Grid",line=0,font.main=1)
+
+```
+<br>
+
+Note that distances between neighbor patches in the above networks are equal. Table S1 shows an example dispersal matrix for a grid network. 
+```{r distance matrix,echo=FALSE,results='asis'}
+kable(as.data.frame(network$distanceMatrix),caption = 'Example distance matrix between 16 patches within a grid network to affect distance-dependent dispersal rates.',digits=0,booktabs=TRUE,format='latex')
+```
+
+### Dispersal
+
+Dispersal from patch *i* into patch *j* depends on constant dispersal rate $\omega$ (defined as the proportion of total local recruits that will disperse) and an exponential distance-decay function between *i* and *j* with distance cost to dispersal $m$ [@Anderson2015; @Fullerton2016]:
+
+\begin{align}
+E_{i,j,t}=\omega R_{i,t}p_{i,j}
+\end{align}
+
+where $E_{i,j}$ was the total dispersing animals from patch *i* into patch *j* resulting from dispersal rate $\omega$, total number of local recruits $R_{i,t}$, and probability of dispersal between patches $p_{i,j}$:
+
+\begin{align}
+p_{i,j}=\dfrac{e^{-md_{i,j}}}{\sum\limits_{\substack{j=1 \\ j\neq i}}^{P} e^{-md_{i,j}}}
+\end{align}
+
+where $d_{i,j}$ was the pairwise distance between patches, $m$ was the distance cost to dispersal. The summation term in the denominator normalizes the probability of moving to any patch to between 0 and 1 with the constraint that dispersers cannot move back into their home patch (i.e., $j\neq i$. With $\bar{d}= 1$, $m=0.5$, $\omega=0.1$, $R_{i,t}=100$ in a linear network):
+
+<br>
+
+```{r dispersal,echo=FALSE,fig.hold=TRUE,fig.height=3.5,fig.width=4,fig.cap="Example dispersal patterns across linear network.",fig.align="center"}
+patchDist <- 1
+Npatches <- 16
+m <- 0.5
+omega <- 0.10
+network <- makeNetworks("linear",Npatches=Npatches,patchDist=patchDist,colors="grey70")
+N <- 100
+E <- dispersal(omega,m,network$distanceMatrix,N)
+
+layOut <- matrix(1,nrow=8,ncol=12,byrow=T)
+layOut[-8,5:11] <- 2
+layout(layOut)
+par(mar=c(5,4,0,0))
+plot(network$distanceMatrix[,"A"],E$dispersers[,"A"],xlab="Distance from patch i to j",ylab="Number of dispersers",lwd=2,type="l",cex.lab=1.5)
+par(mar=c(1,1,1,1))
+nodeScalar <- 14
+plot(network$landscape,col="dodgerblue",layout=cbind(1,seq(1,-1,length.out = gorder(network$landscape))),vertex.size=network$node.size*nodeScalar,xlim=c(-1,1),ylim=c(-1,1),rescale=FALSE)
+
+```
+<br>
+
+### Disturbance regimes
+
+In all scenarios, disturbance was applied after `50` years of equilibrating the metapopulation at pristine conditions. We then applied a pulsed disturbance regime at year `50` (the regime varied from *uniform*, *localized, even*, and *localized, uneven* - see *Scenarios* below). Disturbance immediately removed a fixed proportion of the metapopulation adults at that time (i.e., `0.9` of $A_{t=50}$). Once applied, the metapopulation was no longer disturbed and spatio-temporal recovery dynamics emerged from these conditions given the ecological scenarios of network complexity, dispersal rate, spatio-temporal correlations, local patch demographies, and magnitude of stochastic variance.
+
+```{r example disturbance regime, echo=FALSE,warning=FALSE,message=FALSE,fig.height=4,fig.width=8,fig.cap="Recovery regime of metapopulation with linear topology through time (a) and space (b).",fig.align="center"}
+seed <- 2477
+set.seed(seed)
+source("Functions/Linear network.R")
+source("Functions/Dispersal function.R")
+source("Functions/patch_variance.R")
+source("Functions/local disturbance.R")
+source("Functions/some functions.R")
+source("Functions/Metapop function.R")
+source("Functions/popDynFn.R")
+source("Functions/Add landscapes plot.R")
+Nyears <- 150
+Nburnin <- 50
+metaK <- 1600
+matLayout <- matrix(0,ncol=18,nrow=12,byrow=T)
+matLayout[1:12,1:9] <- 1
+matLayout[1:4,10:12] <- 2
+matLayout[1:4,13:15] <- 3
+matLayout[5:8,10:12] <- 4
+matLayout[5:8,13:15] <- 5
+matLayout[9:12,10:12] <- 6
+matLayout[9:12,13:15] <- 7
+matLayout[4:9,16:17] <- 8
+layout(matLayout)
+linearSim <- metaPop(Npatches=16,networkType="linear",patchDistance=1,Nburnin=50,NyrsPost=100,omega=0.01,m=100,alpha=2,metaK=1600,cv=1e-6,DistScenario="uniform",magnitude_of_decline=0.9,lagTime=1,prodType="Beverton-Holt",rho.time=1e-5,rho.dist=1e5,compensationLag=25,dataWeighting=0.1,alphaVariable=FALSE,kVariable=FALSE,spatialPlots=FALSE)
+spatialRecoveryPlotv2(textSize=1,linearSim$popDyn,linearSim$MetaPop,linearSim$k_p,Nlevels=10,linearSim$recovery,Nburnin,Nyears,nodeScalar=35,linearSim$network,networkType="linear",Npatches=Npatches,panel_text=c("(a)","(b)"),year_seq=(Nburnin+seq(0,15,by=3)))
+Nlevels <- 10
+textSize <- 1
+par(mar=c(1,1,1,1))
+plot(NA,xlim=c(-1,1),ylim=c(-1,1),xaxt="n",yaxt="n",xlab="",ylab="",frame.plot=FALSE,xpd=NA)
+colorlegend(rev(colfunc(Nlevels)),zlevels=Nlevels,zlim=c(0,1),dz=0.1,posx=c(0.35,0.5),posy=c(0.1,0.95),digit=2)
+title(main=expression('N'[t]*'/K'),line=0.5,font.main=1,cex.main=1.5*textSize,xpd=NA)
+
+```
+
+### Recruitment stochasticity
+Our model allowed for stochastic recruitment that followed a lognormal distribution with average variation in recruitment of $\sigma_R$. In cases with stochastic recruitment, the deterministic recruitment in eq. S.4 becomes:
+
+\begin{align}
+R_{i,t}=\cfrac{\alpha_iN_{i,t-1}}{1+\cfrac{\alpha_i-1}{\beta_i}N_{i,t-1}}e^{(\epsilon_{i,t}-\cfrac{\sigma_{R}^2}{2})}
+\end{align}
+
+where lognormal deviates for each patch *i* at time *t* were drawn from a multivariate normal distribution (*MVN*) with bias correction $\cfrac{\sigma_{R}^2}{2}$. If $\sigma_R$ was low, then metapopulation dynamics approach the deterministic case. In some scenarios, we evaluated the role of spatially and/or temporally correlated deviates among local patches to model potential common drivers affecting metapopulation dynamics (e.g., Moran effects). Expected recruitment deviates followed a first-order autoregression model such that:
+
+\begin{align}
+\epsilon_{i,t}=\rho_T\epsilon_{t-1}+MVN(\mu=0,\Sigma=\sigma_R^2(1-\rho_T^2)e^{(-\rho_SD_{i,j})})
+\end{align}
+
+
+where $\rho_T$ was temporal correlation (bounded $0-1$) and $\rho_S$ was rate of distance-decay in spatial correlation (bounded $0-\infty$ with higher values leading to independent patches). If $\rho_T$ was 0 and $\rho_S$ was high, then annual recruitment deviates were independent. We modelled the initial conditions for autoregressive recruitment deviates $\epsilon_{i,1}$ by drawing from a stationary normal distribution with mean $\mu=0$ and variance $\sigma_R^2$ such that:
+\begin{align}
+\epsilon_{i,1} \sim N(\mu=0,\sigma=\sigma_R)
+\end{align}
+We illustrate the effects of four kinds of recruitment deviates below using the same random number generator seed:
+
+```{r independent stochasticity, echo=FALSE,warning=FALSE,message=FALSE,fig.height=6,fig.width=7,fig.cap="Metapopulation dynamics with independent (a), spatially correlated (b), temporally correlated (c), and spatio-temporally correlated (d) recruitment deviates. Black line indicates metapopulation, and dashed lines indicate local patches with red and blue relating to abundances after 100 years post-disturbance were less than or greater than 1.0 pre-disturbance, respectively.",fig.align="center"}
+seed <- 2477
+set.seed(seed)
+trial <- metaPop(Npatches=16,networkType="complex",patchDistance=1,Nburnin=50,NyrsPost=100,omega=0.01,m=100,alpha=2,metaK=1600,cv=0.12,DistScenario="uniform",magnitude_of_decline=0.9,lagTime=1,prodType="Beverton-Holt",rho.time=1e-5,rho.dist=1e5,compensationLag=25,dataWeighting=0.1,alphaVariable=TRUE,kVariable=TRUE,spatialPlots=FALSE)
+layout(matrix(1:4,nrow=2,ncol=2,byrow=TRUE))
+par(mar=c(5,4,1,1))
+textSize <- 1
+Nyears <- 150
+Nlevels <- 10
+popDyn <- trial$popDyn
+k_p <- trial$k_p
+MetaPop <- trial$MetaPop
+metaK <- 1600
+recovery <- trial$recovery
+Nburnin <- 50
+levelFactors <- factor(pmax(0.0,pmin(1.0,round(popDyn[Nyears,,"Spawners"]/k_p*Nlevels)/Nlevels)),levels=((0:10)/Nlevels))
+colfunc <- colorRampPalette(c("royalblue4","dodgerblue","lightblue","darkorange1","firebrick"))
+matplot(t(t(popDyn[,,"Spawners"])/k_p),type="l",xlab="Time",ylab="Relative abundance (N/K)",col=rev(colfunc(Nlevels+1))[levelFactors],ylim=c(0,2.1),cex.lab=textSize,xpd=TRUE)
+lines(MetaPop[,"Spawners"]/metaK,lwd=3,col="black")
+Corner_text("a) - independent","topleft")
+
+set.seed(seed)
+trial <- metaPop(Npatches=16,networkType="complex",patchDistance=1,Nburnin=50,NyrsPost=100,omega=0.01,m=100,alpha=2,metaK=1600,cv=0.12,DistScenario="uniform",magnitude_of_decline=0.9,lagTime=1,prodType="Beverton-Holt",rho.time=1e-5,rho.dist=0.5,compensationLag=25,dataWeighting=0.1,alphaVariable=TRUE,kVariable=TRUE,spatialPlots=FALSE)
+popDyn <- trial$popDyn
+k_p <- trial$k_p
+MetaPop <- trial$MetaPop
+recovery <- trial$recovery
+levelFactors <- factor(pmax(0.0,pmin(1.0,round(popDyn[Nyears,,"Spawners"]/k_p*Nlevels)/Nlevels)),levels=((0:10)/Nlevels))
+colfunc <- colorRampPalette(c("royalblue4","dodgerblue","lightblue","darkorange1","firebrick"))
+matplot(t(t(popDyn[,,"Spawners"])/k_p),type="l",xlab="Time",ylab="Relative abundance (N/K)",col=rev(colfunc(Nlevels+1))[levelFactors],ylim=c(0,2.1),cex.lab=textSize,xpd=TRUE)
+lines(MetaPop[,"Spawners"]/metaK,lwd=3,col="black")
+Corner_text("b) - spatial","topleft")
+
+set.seed(seed)
+trial <- metaPop(Npatches=16,networkType="complex",patchDistance=1,Nburnin=50,NyrsPost=100,omega=0.01,m=100,alpha=2,metaK=1600,cv=0.12,DistScenario="uniform",magnitude_of_decline=0.9,lagTime=1,prodType="Beverton-Holt",rho.time=0.75,rho.dist=1e5,compensationLag=25,dataWeighting=0.1,alphaVariable=TRUE,kVariable=TRUE,spatialPlots=FALSE)
+popDyn <- trial$popDyn
+k_p <- trial$k_p
+MetaPop <- trial$MetaPop
+recovery <- trial$recovery
+levelFactors <- factor(pmax(0.0,pmin(1.0,round(popDyn[Nyears,,"Spawners"]/k_p*Nlevels)/Nlevels)),levels=((0:10)/Nlevels))
+colfunc <- colorRampPalette(c("royalblue4","dodgerblue","lightblue","darkorange1","firebrick"))
+matplot(t(t(popDyn[,,"Spawners"])/k_p),type="l",xlab="Time",ylab="Relative abundance (N/K)",col=rev(colfunc(Nlevels+1))[levelFactors],ylim=c(0,2.1),cex.lab=textSize,xpd=TRUE)
+lines(MetaPop[,"Spawners"]/metaK,lwd=3,col="black")
+Corner_text("c) - temporal","topleft")
+
+set.seed(seed)
+trial <- metaPop(Npatches=16,networkType="complex",patchDistance=1,Nburnin=50,NyrsPost=100,omega=0.01,m=100,alpha=2,metaK=1600,cv=0.12,DistScenario="uniform",magnitude_of_decline=0.9,lagTime=1,prodType="Beverton-Holt",rho.time=0.75,rho.dist=0.5,compensationLag=25,dataWeighting=0.1,alphaVariable=TRUE,kVariable=TRUE,spatialPlots=FALSE)
+popDyn <- trial$popDyn
+k_p <- trial$k_p
+MetaPop <- trial$MetaPop
+recovery <- trial$recovery
+levelFactors <- factor(pmax(0.0,pmin(1.0,round(popDyn[Nyears,,"Spawners"]/k_p*Nlevels)/Nlevels)),levels=((0:10)/Nlevels))
+colfunc <- colorRampPalette(c("royalblue4","dodgerblue","lightblue","darkorange1","firebrick"))
+matplot(t(t(popDyn[,,"Spawners"])/k_p),type="l",xlab="Time",ylab="Relative abundance (N/K)",col=rev(colfunc(Nlevels+1))[levelFactors],ylim=c(0,2.1),cex.lab=textSize,xpd=TRUE)
+lines(MetaPop[,"Spawners"]/metaK,lwd=3,col="black")
+Corner_text("d) - spatial-temporal","topleft")
+
+```
+
+
+## Post-disturbance outcomes
+
+### Monitoring & management at aggregate-scale
+While true metapopulation dynamics emerge from local patch dynamics and dispersal in eq. S.1, natural resource managers often monitor and manage at the scale of the metapopulation. Hence, management at this scale inherently defines the stock-recruitment dynamics of the aggregate complex of patches (i.e., metapopulation) as:
+
+\begin{align}
+{\EX(N_t)}=\cfrac{\bar{\alpha}{A}_{t-1}}{1+\cfrac{\bar{\alpha}-1}{\bar{\beta}}{A}_{t-1}}
+\end{align}
+
+where $\bar{\alpha}$ was the compensation ratio averaged across the metapopulation and $\bar{\beta}$ was the  carrying capacity summed across the entire metapopulation.
+
+### Recovery metrics
+
+We measured the following post-disturbance outcomes to track the temporal and spatial recovery regime of the metapopulation.
+
+1. Recovery rate after disturbance:
+    Recovery rate represents the inverse proportion of the post-disturbance phase that the metapopulation took to recover. Recovery rate was calculated as $1-T_{recovery}/T_{sim}$ where the recovery time, $T_{recovery}$, was the number of years/generations (1 year = 1 generation in our models) it took for the metapopulation to reach five consecutive years ≥ pre-disturbance abundance. Recovery rate captures how quickly the aggregate metapopulation recovers from disturbance but doesn’t take into account whether any given local patches recover to their pre-disturbance capacity nor did it allow for any uncertainty around recovery criteria.
+
+2. Patch occupancy:
+  The number of patches with `>0.1` local carrying capacity after disturbance in the short-term (5 years), medium-term (10 years), and long-term (25 years). This value characterizes the expected risk of spatial contractions or local patch collapses, and reflects how interactions between spatial structure, disturbance, and dispersal shape source-sink dynamics and the ability to provide (or not) rescue effects and recover local patches.
+
+3. Relative production:
+  The ratio between the empirical metapopulation adult abundances to the expected adult recruitment if the metapopulation were a single, contiguous population of equivalent size and productivity (i.e., carrying capacities and productivity were equal to the sum $\beta$ and mean $\alpha$ among patches, respectively). We term $\Delta_{N}$ by calculating the stock-recruitment model to aggregate metapopulation adults (eq. S.10) such that:  
+\begin{align}
+\Delta_{N_t}=\cfrac{A_t}{\EX(N_t)}
+\end{align}  
+A value of 1.0 would indicate that the disturbed metapopulation production was equal to a single, contiguous population such that source-sink dynamics were not consuming surplus recruits. In other words, this metric can describe whether the metapopulation acts more than ($\Delta_{N_t}$>1.0), less than ($\Delta_{N_t}$<1.0), or equal to the sum of its parts ($\Delta_{N_t}$=1.0).
+
+4. Risk of non-recovery after disturbance:
+  Non-recovery rate was defined as the % of simulations where metapopulation abundance failed to recover to `1.0` of the average pre-disturbance abundance for `5` consecutive years post-disturbance. This "non-recovery rate" reflects the risk of a long-term state shift in metapopulation dynamics after disturbance in the face of stochasticity. 
+
+## Scenarios
+
+We tested all combinations of the following eight processes (below) and ran `100` stochastic iterations per scenario (see section on *Sensitivity test of mean recovery metrics* below) to estimate the mean outcome for each of the above recovery metrics:
+
+1. Homogenous and spatially variable recruitment compensation ratio across patches, i.e. intrinsic rate of population growth ($\alpha_i$).
+    a. when **variable**, $\alpha_i \sim TN(\mu=\bar{\alpha}, \sigma_{\alpha}=0.3\bar{\alpha})$ with a truncation applied such that $5 \leq \alpha_i \geq 1$ to ensure that patches could, at minimum, could replace themselves but with an upper limit of a 5-fold improvement to per-capita productivity. By comparison, @Myers1999 found that compensation ratio (their $\hat\alpha$) ranged 1-7 for most species evaluated Since our focus was on at-risk species, we opted to truncate $\alpha_i$ towards the lower end of this range, with a mean of `2.0`.
+
+2. Homogenous and spatially variable local carrying capacity across patches, i.e. asymptote of expected recruits at high adult densities ($\beta_i$)
+    a. when **variable**, $\beta_i \sim multinomial(p_i,N)$ where $p_i=\cfrac{e^{\theta_i}}{ \sum{e^{\theta_i}}}$, $\theta_i \sim uniform(0,1)$, and $N=\bar{\beta}$, with the added constraint that $\beta_i<0.1\bar{\beta}$ to ensure that no one patch exceed 10% of total metapopulation abundance (a necessary constraint when modelling *local, even* and *local, uneven* disturbances below). **Note** that, when local variation in demography rates occurred, the truncated normal in *Appendix S1: Section S1.3(1.a)* and truncated multinomial in *Appendix S1: Section S1.3(2.a)* above led compensation ratio and carrying capacity, respectively, to vary by the same magnitude ~28% coefficient of variation (Appendix S1: Figure S6).
+
+3. Variation in the spatial distribution of disturbances where a proportion of individuals were removed from the metapopulation (e.g., `0.90`) occurs.
+    a. *uniform* - individuals randomly removed across all patches, with all individuals having equal vulnerability to being removed.
+    b. *local, even* - randomly chosen individuals were removed from a random subset of patches (as long as 90% of total metapopulation individuals can be removed from that subset)
+        i. Specifically, a numerical algorithm was used to search and find a set of disturbance conditions whereby removing a random proportion of individuals from a random chosen portion of local patches achieved both: 
+            + a total loss that summed to a ~90% loss in abundance to the whole metapopulation, and
+            + left at least one local patch *undisturbed* to start metapopulation recoveries.
+    c. *local, uneven* - total extirpation of randomly selected subset of patches (as long as 90% of total metapopulation individuals can be removed from that subset).
+        i. Specifically, a numerical algorithm was used to search and find a set of disturbance  conditions whereby extirpations to a random chosen portion of local patches achieved both:
+            + a total loss that summed to a ~90% loss in abundance to the whole metapopulation, and 
+            + left at least one local patch *undisturbed* to start metapopulation recoveries. 
+
+4. Density-independent dispersal rates $\omega$ from 0 to 5% of individuals within a patch will disperse.
+
+5. Topology of the spatial networks with linear, dendritic, star, and grid networks. Each network with $P=16$ and distance between patches $\bar{d}=1$.
+
+6. Stochastic recruitment deviates with low, medium, and high standard deviation in lognormal error. Used to generate stochastic population dynamics via random deviates from the expected recruitment relationship in eq. S.2.
+
+7. Temporal correlation in recruitment deviates from low, medium, and high correlation (i.e., good year at time *t* begets good year at time *t+1*).
+
+8. Spatial correlation in recruitment deviates among patches from low, medium, to high correlation (i.e., neighboring patches go up or down together).
+
+```{r histogram of demographic variation, echo=FALSE,fig.height=5.5,fig.width=6,fig.cap="Histogram showing variation among demographic rates after simulatng 100,000 local patches when using the truncated normal in Appendix S1: Section 1.3(1.a) and truncated multinomial in Appendix S1: Section 1.3(2.a) when modelling variation in local compensation ratio (grey) and carrying capacity (red).",fig.align="center"}
+library(mvtnorm)
+#library(marima)
+require(mvtnorm)
+source("Functions/Linear network.R")
+source("Functions/Dispersal function.R")
+source("Functions/patch_variance.R")
+Npatches=16
+networkType="linear"
+patchDistance=1
+Nburnin=50
+NyrsPost=50
+omega=0.01
+m=100
+alpha=2
+metaK=1600
+cv=1e-6
+DistScenario="uniform"
+magnitude_of_decline=0.9
+lagTime=1
+prodType="Beverton-Holt"
+rho.time=1e-5
+rho.dist=1e5
+compensationLag=25
+dataWeighting=0.1
+alphaVariable=TRUE
+kVariable=TRUE
+spatialPlots=TRUE
+patchID=NA
+k_p <- rep((metaK/Npatches),Npatches)
+
+patch_demo <- replicate(100000,patch_variance(model=prodType,alphaVariable,kVariable,Npatches=Npatches,alpha=alpha,alpha_p=alpha_p,metaK=metaK,k_p=k_p,magnitude_of_decline=magnitude_of_decline))
+
+mn_alpha <- mean(unlist(patch_demo[which(dimnames(patch_demo)[[1]]=="alpha_p"),]))
+sigma_alpha <- sd(unlist(patch_demo[which(dimnames(patch_demo)[[1]]=="alpha_p"),]))
+mn_beta <- mean(unlist(patch_demo[which(dimnames(patch_demo)[[1]]=="beta_p"),]))
+sigma_beta <- sd(unlist(patch_demo[which(dimnames(patch_demo)[[1]]=="beta_p"),]))
+#sigma_alpha/mn_alpha;sigma_beta/mn_beta
+x <- scale(unlist(patch_demo[which(dimnames(patch_demo)[[1]]=="alpha_p"),]))
+y <- scale(unlist(patch_demo[which(dimnames(patch_demo)[[1]]=="beta_p"),]))
+hist(x,xlim=c(-4,4),main="Scaled local patch demography (100,000 numerical simulations)",xlab="Scaled local demographic rate (mean centered)",col=adjustcolor("black",0.5), breaks = seq(min(x), max(x), length.out = 11),freq=FALSE,ylim=c(0,0.5),cex.main=0.75)
+hist(y,xlim=c(-4,4),title="",xlab="Variation in local carrying capacity (mean centered)",add=TRUE,col=adjustcolor("red",0.5), breaks = seq(min(y), max(y), length.out = 11),freq=FALSE,ylim=c(0,0.5))
+legend("topright",title="Demographic rate",c("Compensation ratio","Carrying capacity"),pch=22,pt.bg=c(adjustcolor("black",0.5),adjustcolor("red",0.5)),bty="n")
+```
+\newpage
+### Example disturbance regimes
+Below, we demonstrate how each of the above disturbance scenarios in *Section S1.3(3.a-c)* manifest as spatially distributed impacts to local patches among the metapopulation. Each figure below shows nine random iterations of a metapopulation with a set of `16` patches structured in a dendritic network at the time of a 90% loss in aggregate abundance, and how that aggregate loss is realized as impacts to local patches. Each patch is shown as a circle or node, and its abundance relative to its local carrying capacity is indicated in two ways: (1) with the numbers within the circle and (2) the colour of the circle itself (with the colour scale gradient indicated to the right). We begin with the *uniform* disturbance scenario.
+```{r example uniform spatial disturbance, echo=FALSE,fig.height=5.5,fig.width=6,fig.cap="Nine example disturbance scenarios for uniform disturbance in a dendritic network. The relative population status at the time of disturbance (abundance relative to local carrying capacity) indicated by text labels and color gradient.",fig.align="center"}
+library(mvtnorm)
+#library(marima)
+require(mvtnorm)
+source("Functions/Linear network.R")
+source("Functions/Dispersal function.R")
+source("Functions/patch_variance.R")
+Npatches=16
+networkType="dendritic"
+patchDistance=1
+Nburnin=50
+NyrsPost=50
+omega=0.01
+m=100
+alpha=2
+metaK=1600
+cv=1e-6
+DistScenario="uniform"
+magnitude_of_decline=0.9
+lagTime=1
+prodType="Beverton-Holt"
+rho.time=1e-5
+rho.dist=1e5
+compensationLag=25
+dataWeighting=0.1
+alphaVariable=TRUE
+kVariable=TRUE
+spatialPlots=TRUE
+network <- makeNetworks(networkType,Npatches,patchDistance,colors=c("royalblue4","dodgerblue","lightblue","darkorange1","firebrick"))
+nodeScalar <- 35
+k_p <- rep((metaK/Npatches),Npatches)
+matLayout <- matrix(0,ncol=34,nrow=21,byrow=T)
+matLayout[1:7,1:10] <- 1
+matLayout[1:7,11:20] <- 2
+matLayout[1:7,21:30] <- 3
+
+matLayout[8:14,1:10] <- 4
+matLayout[8:14,11:20] <- 5
+matLayout[8:14,21:30] <- 6
+
+matLayout[15:21,1:10] <- 7
+matLayout[15:21,11:20] <- 8
+matLayout[15:21,21:30] <- 9
+
+matLayout[2:21,31:34] <- 10
+layout(matLayout)
+par(mar=c(5,5,1,1))
+for(i in 1:9)
+{
+  patch_demo <- patch_variance(model=prodType,alphaVariable,kVariable,Npatches=Npatches,alpha=alpha,alpha_p=alpha_p,metaK=metaK,k_p=k_p,magnitude_of_decline=magnitude_of_decline)
+  deaths_p <- Disturbance(metaPop=ceiling(sum(patch_demo$k_p)),magnitude=magnitude_of_decline,DisType=DistScenario, N_p=ceiling(patch_demo$k_p),prod=k_p,Npatches=Npatches)$deaths_p
+  disturb_demo <- patch_demo$k_p - deaths_p
+  patchID=pmax(0.0,pmin(1.0,round(disturb_demo/patch_demo$k_p,2)))
+  levelFactors <- factor(pmax(0.0,pmin(1.0,round(disturb_demo/patch_demo$k_p*Nlevels)/Nlevels)),levels=((0:10)/Nlevels))
+  V(network$landscape)$color <- rev(colfunc(Nlevels+1))[levelFactors]
+  V(network$landscape)$label.cex <- 0.75
+  plottingFunc(network,"dendritic",nodeScalar,Npatches,plotID=patchID)
+}
+par(mar=c(1,1,1,1))
+plot(NA,xlim=c(-1,1),ylim=c(-1,1),xaxt="n",yaxt="n",xlab="",ylab="",frame.plot=FALSE,xpd=NA)
+colorlegend(rev(colfunc(Nlevels)),zlevels=Nlevels,zlim=c(0,1),dz=0.1,posx=c(0.35,0.5),posy=c(0.1,0.95),digit=2)
+title(main="Relative status",line=0.75,font.main=1,cex.main=textSize,xpd=NA)
+```
+\newpage
+Next, we show how the 90% loss is applied to the dendritic network under the *local, even* disturbance scenario. 
+```{r example local even spatial disturbance, echo=FALSE,fig.height=5.5,fig.width=6,fig.cap="Nine example disturbance scenarios for local, even disturbance in a dendritic network. The relative population status at the time of disturbance (abundance relative to local carrying capacity) indicated by text labels and color gradient.",fig.align="center"}
+library(mvtnorm)
+#library(marima)
+require(mvtnorm)
+source("Functions/Linear network.R")
+source("Functions/Dispersal function.R")
+source("Functions/patch_variance.R")
+Npatches=16
+networkType="dendritic"
+patchDistance=1
+Nburnin=50
+NyrsPost=50
+omega=0.01
+m=100
+alpha=2
+metaK=1600
+cv=1e-6
+DistScenario="random"
+magnitude_of_decline=0.9
+lagTime=1
+prodType="Beverton-Holt"
+rho.time=1e-5
+rho.dist=1e5
+compensationLag=25
+dataWeighting=0.1
+alphaVariable=TRUE
+kVariable=TRUE
+spatialPlots=TRUE
+network <- makeNetworks(networkType,Npatches,patchDistance,colors=c("royalblue4","dodgerblue","lightblue","darkorange1","firebrick"))
+nodeScalar <- 35
+k_p <- rep((metaK/Npatches),Npatches)
+matLayout <- matrix(0,ncol=34,nrow=21,byrow=T)
+matLayout[1:7,1:10] <- 1
+matLayout[1:7,11:20] <- 2
+matLayout[1:7,21:30] <- 3
+
+matLayout[8:14,1:10] <- 4
+matLayout[8:14,11:20] <- 5
+matLayout[8:14,21:30] <- 6
+
+matLayout[15:21,1:10] <- 7
+matLayout[15:21,11:20] <- 8
+matLayout[15:21,21:30] <- 9
+
+matLayout[2:21,31:34] <- 10
+layout(matLayout)
+par(mar=c(5,5,1,1))
+for(i in 1:9)
+{
+  patch_demo <- patch_variance(model=prodType,alphaVariable,kVariable,Npatches=Npatches,alpha=alpha,alpha_p=alpha_p,metaK=metaK,k_p=k_p,magnitude_of_decline=magnitude_of_decline)
+  deaths_p <- Disturbance(metaPop=ceiling(sum(patch_demo$k_p)),magnitude=magnitude_of_decline,DisType=DistScenario, N_p=ceiling(patch_demo$k_p),prod=k_p,Npatches=Npatches)$deaths_p
+  disturb_demo <- patch_demo$k_p - deaths_p
+  patchID=pmax(0.0,pmin(1.0,round(disturb_demo/patch_demo$k_p,2)))
+  levelFactors <- factor(pmax(0.0,pmin(1.0,round(disturb_demo/patch_demo$k_p*Nlevels)/Nlevels)),levels=((0:10)/Nlevels))
+  V(network$landscape)$color <- rev(colfunc(Nlevels+1))[levelFactors]
+  V(network$landscape)$label.cex <- 0.75
+  plottingFunc(network,networkType,nodeScalar,Npatches,plotID=patchID)
+}
+par(mar=c(1,1,1,1))
+plot(NA,xlim=c(-1,1),ylim=c(-1,1),xaxt="n",yaxt="n",xlab="",ylab="",frame.plot=FALSE,xpd=NA)
+colorlegend(rev(colfunc(Nlevels)),zlevels=Nlevels,zlim=c(0,1),dz=0.1,posx=c(0.35,0.5),posy=c(0.1,0.95),digit=2)
+title(main="Relative status",line=0.75,font.main=1,cex.main=textSize,xpd=NA)
+```
+\newpage
+Last, we show how the 90% loss is applied to the dendritic network under the *local, uneven* disturbance scenario. 
+```{r example uneven spatial disturbance, echo=FALSE,fig.height=5.5,fig.width=6,fig.cap="Nine example disturbance scenarios for local, uneven disturbances in a dendritic network. The relative population status at the time of disturbance (abundance relative to local carrying capacity) indicated by text labels and color gradient.",fig.align="center"}
+library(mvtnorm)
+#library(marima)
+require(mvtnorm)
+source("Functions/Linear network.R")
+source("Functions/Dispersal function.R")
+source("Functions/patch_variance.R")
+Npatches=16
+networkType="dendritic"
+patchDistance=1
+Nburnin=50
+NyrsPost=50
+omega=0.01
+m=100
+alpha=2
+metaK=1600
+cv=1e-6
+DistScenario="random_patch"
+magnitude_of_decline=0.9
+lagTime=1
+prodType="Beverton-Holt"
+rho.time=1e-5
+rho.dist=1e5
+compensationLag=25
+dataWeighting=0.1
+alphaVariable=TRUE
+kVariable=TRUE
+spatialPlots=TRUE
+network <- makeNetworks(networkType,Npatches,patchDistance,colors=c("royalblue4","dodgerblue","lightblue","darkorange1","firebrick"))
+nodeScalar <- 35
+k_p <- rep((metaK/Npatches),Npatches)
+matLayout <- matrix(0,ncol=34,nrow=21,byrow=T)
+matLayout[1:7,1:10] <- 1
+matLayout[1:7,11:20] <- 2
+matLayout[1:7,21:30] <- 3
+
+matLayout[8:14,1:10] <- 4
+matLayout[8:14,11:20] <- 5
+matLayout[8:14,21:30] <- 6
+
+matLayout[15:21,1:10] <- 7
+matLayout[15:21,11:20] <- 8
+matLayout[15:21,21:30] <- 9
+
+matLayout[2:21,31:34] <- 10
+layout(matLayout)
+par(mar=c(5,5,1,1))
+for(i in 1:9)
+{
+  patch_demo <- patch_variance(model=prodType,alphaVariable,kVariable,Npatches=Npatches,alpha=alpha,alpha_p=alpha_p,metaK=metaK,k_p=k_p,magnitude_of_decline=magnitude_of_decline)
+  deaths_p <- Disturbance(metaPop=ceiling(sum(patch_demo$k_p)),magnitude=magnitude_of_decline,DisType=DistScenario, N_p=ceiling(patch_demo$k_p),prod=k_p,Npatches=Npatches)$deaths_p
+  disturb_demo <- patch_demo$k_p - deaths_p
+  patchID=pmax(0.0,pmin(1.0,round(disturb_demo/patch_demo$k_p,2)))
+  levelFactors <- factor(pmax(0.0,pmin(1.0,round(disturb_demo/patch_demo$k_p*Nlevels)/Nlevels)),levels=((0:10)/Nlevels))
+  V(network$landscape)$color <- rev(colfunc(Nlevels+1))[levelFactors]
+  V(network$landscape)$label.cex <- 0.75
+  plottingFunc(network,networkType,nodeScalar,Npatches,plotID=patchID)
+}
+par(mar=c(1,1,1,1))
+plot(NA,xlim=c(-1,1),ylim=c(-1,1),xaxt="n",yaxt="n",xlab="",ylab="",frame.plot=FALSE,xpd=NA)
+colorlegend(rev(colfunc(Nlevels)),zlevels=Nlevels,zlim=c(0,1),dz=0.1,posx=c(0.35,0.5),posy=c(0.1,0.95),digit=2)
+title(main="Relative status",line=0.75,font.main=1,cex.main=textSize,xpd=NA)
+```
+### Walkthrough of example results
+
+We demonstrate our metapopulation model with an example outcome for a linear network composed of `16` patches, a dispersal rate of `0.01` and a high enough dispersal cost such that individuals are only willing to move to their closest neighboring patches. This limits the strength of potential rescue effects. For this example, patches varied in their productivity and carrying capacity but will have deterministic population dynamics.
+
+```{r example results1, echo=FALSE,fig.height=5.5,fig.width=6,fig.cap="Example iteration of spatial recovery regime of metapopulation with linear topology through time (top left) and space (top right). Recruitment dynamics before and 10 years after disturbance (bottom left). Relative bias in aggregate-scale estimates of carrying capacity, compensation ratio, and recruitment production in recovery phase (bottom right).",fig.align="center"}
+seed <- 2477
+set.seed(seed)
+linearSim <- metaPop(Npatches=16,networkType="linear",patchDistance=1,Nburnin=50,NyrsPost=100,omega=0.01,m=100,alpha=2,metaK=1600,cv=1e-6,DistScenario="uniform",magnitude_of_decline=0.9,lagTime=1,prodType="Beverton-Holt",rho.time=1e-5,rho.dist=1e5,compensationLag=25,dataWeighting=0.1,alphaVariable=TRUE,kVariable=TRUE,spatialPlots=TRUE)
+```
+\newpage
+We can then contrast this with a different network shape, like a dendritic network. 
+
+```{r example results2, echo=FALSE,fig.height=5.5,fig.width=6,fig.cap="Example iteration of spatial recovery regime of metapopulation with dendritic topology.",fig.align="center"}
+seed <- 2477
+set.seed(seed)
+dendriticSim <- metaPop(Npatches=16,networkType="dendritic",patchDistance=1,Nburnin=50,NyrsPost=100,omega=0.01,m=100,alpha=2,metaK=1600,cv=1e-6,DistScenario="uniform",magnitude_of_decline=0.9,lagTime=1,prodType="Beverton-Holt",rho.time=1e-5,rho.dist=1e5,compensationLag=25,dataWeighting=0.1,alphaVariable=TRUE,kVariable=TRUE,spatialPlots=TRUE)
+```
+\newpage
+Now, let's add some stochasticity to recruitment and see how this affects the recovery regime.
+
+```{r example results3, echo=FALSE,fig.height=5.5,fig.width=6,fig.cap="Example iteration of spatial recovery regime of stochastic metapopulation.",fig.align="center"}
+seed <- 2477
+set.seed(seed)
+dendriticSim2 <- metaPop(Npatches=16,networkType="dendritic",patchDistance=1,Nburnin=50,NyrsPost=100,omega=0.01,m=100,alpha=2,metaK=1600,cv=0.1,DistScenario="uniform",magnitude_of_decline=0.9,lagTime=1,prodType="Beverton-Holt",rho.time=1e-5,rho.dist=1e5,compensationLag=25,dataWeighting=0.1,alphaVariable=TRUE,kVariable=TRUE,spatialPlots=TRUE)
+```
+\newpage
+Next, we can contrast with a disturbance regime where the disturbance is locally even among a subset of local patches (rather than uniform across all patches or local extirpations).
+
+```{r example results4, echo=FALSE,fig.height=5.5,fig.width=6,fig.cap="Example iteration of spatial recovery regime of stochastic metapopulation.",fig.align="center"}
+seed <- 2477
+set.seed(seed)
+dendriticSim3 <- metaPop(Npatches=16,networkType="dendritic",patchDistance=1,Nburnin=50,NyrsPost=100,omega=0.01,m=100,alpha=2,metaK=1600,cv=0.1,DistScenario="random",magnitude_of_decline=0.9,lagTime=1,prodType="Beverton-Holt",rho.time=1e-5,rho.dist=1e5,compensationLag=25,dataWeighting=0.1,alphaVariable=TRUE,kVariable=TRUE,spatialPlots=TRUE)
+```
+
+\newpage
+Next, we can contrast with a disturbance regime where the disturbance is concentrated on local patches that can be completely extirpated (rather than the disturbance being applied proportionally across all patches e.g., a mixed-stock fishery).
+
+```{r example results5, echo=FALSE,fig.height=5.5,fig.width=6,fig.cap="Example iteration of spatial recovery regime of stochastic metapopulation.",fig.align="center"}
+seed <- 2477
+set.seed(seed)
+dendriticSim3 <- metaPop(Npatches=16,networkType="dendritic",patchDistance=1,Nburnin=50,NyrsPost=100,omega=0.01,m=100,alpha=2,metaK=1600,cv=0.1,DistScenario="random_patch",magnitude_of_decline=0.9,lagTime=1,prodType="Beverton-Holt",rho.time=1e-5,rho.dist=1e5,compensationLag=25,dataWeighting=0.1,alphaVariable=TRUE,kVariable=TRUE,spatialPlots=TRUE)
+```
+\newpage
+## Sensitivity test of mean recovery metrics
+The total number of scenarios resulted in a long computation time to run all simulations a large number of times necessary to evaluate how metapopulation responded, on average, to our ecological and disturbance scenarios. To determine a sufficient number of bootstrap iterations to run, we ran a sensitivity test to explore the relative sensitivity of the mean for a few recovery metrics of interest (recovery rate) to the number of stochastic simulations ran per scenario. Below, we repeated the scenario for a metapopulation with a dendritic network, with high stochasticity, locally uneven disturbances, large spatial-temporal correlations, variable patch productivities, and variable patch capacities along gradients of 10, 100, 500, and 1,000 stochastic simulations. Based on these preliminary results, we see that the mean for most metrics was relatively insensitive with at least 100 simulations.
+
+```{r bootstrap results, echo=FALSE,fig.height=6,fig.width=6,fig.cap="Sensitivity test of mean recovery metrics to number of iterations to bootstrap the stochastic simulations. Example metapopulation consisted of a dendritic network, high recruitment stochasticity, locally uneven disturbance regime, large spatial-temporal correlations, variable patch productivities, and variable patch capacities tested along gradients of 10, 100, 500, and 1,000 bootstrapped iterations.",fig.align="center"}
+library(ggplot2)
+Nlevels <- 11
+model <- "Beverton-Holt"
+# simulation parameters
+Npatches <- 16
+patchDist <- 1
+Nburnin <- 50
+NyrsPost <- 100
+Nyears <- Nburnin+NyrsPost
+compLag <- 25 # how many years to lag estimates of compensation
+dataWeighting <- 0.1 # penalty to past years for data weighting
+m <- 100 # distance decay function: penalty of 1 says about 60% of dispersing recruits move to neighbor patches. penalty of 2 says about 90% of dispersing recruits move to neighbor patches
+# adult stock-juvenile recruitment traits
+alpha <- 2
+metaK <- 1600
+# how big is the disturbance after Nburnin years?
+magnitude_of_decline <- 0.9
+# what is the lag time between recruits and spawners
+lagTime <- 1
+bootstrap_results <- readRDS("Simulations/bootstrap_results2022-11-17.rds")
+bootstrap_results$StateShift <- ((1-bootstrap_results$recovered)+(1-bootstrap_results$longOcc))/2
+bootstrap_results$RecoveryRate <- 1-bootstrap_results$recovery/NyrsPost
+bootstrap_results$collapsed <- 1-bootstrap_results$recovered
+
+bootstrap_results <- tidyr::pivot_longer(bootstrap_results,cols=colnames(bootstrap_results)[-c(1:8,35)],names_to="Metric",values_to="Value")
+sub_results <- bootstrap_results[bootstrap_results$Metric%in%c("RecoveryRate","collapsed","metaAbund","short_surp","med_surp","long_surp","shortOcc","medOcc","longOcc"),]
+
+sub_results$Metric <- factor(sub_results$Metric,levels=c("RecoveryRate","collapsed","metaAbund","short_surp","med_surp","long_surp","shortOcc","medOcc","longOcc"),labels=c("Recovery rate","Prop. of sims w/ no recovery","Metapopulation Abundance","Relative production (short-term)","Relative production (medium-term)","Relative production (long-term)","Relative occupancy (short-term)","Relative occupancy (medium-term)","Relative occupancy (long-term)"))
+
+ggplot(sub_results,aes(x=Nboots,y=Value,fill=Nboots)) +
+  geom_line()+
+  geom_point(pch=21)+
+  facet_wrap(~Metric) +
+  xlab("Number of bootstrap iterations") + ylab("Value for metric")+
+  theme_minimal()+
+  labs(title="Average recovery metrics",subtitle="Sensitivity of mean recovery metrics to the number of stochastic simulations")+
+  theme(legend.position="none",text = element_text(size=11),strip.text.x = element_text(hjust=0,size=7.5),legend.key.size = unit(0.9, "line"),panel.spacing.y = unit(0.75, "lines"))
+
+```
+\newpage
+## General patterns
+
+### Effects of disturbance regime
+The strongest lever influencing recovery in our simulated metapopulations was, by far, the characteristics of the disturbance regime. Specifically, the degree to how locally concentrated the disturbance was on the set of patches was more influential than variation in local demographic rates, dispersal rates, or network topology. Localized disturbances increased the risk of spatial contraction, reduced recovery rates and aggregate compensation, and increased the risk of non-recoveries. By altering aggregate compensation, localized disturbance reduced the relative production of the metapopulation. In other words, through changes in source-sink dynamics, metapopulations under localized disturbance acted less than the sum of their parts – the more localized the impacts, the worse these effects. Uniform disturbances generally left the metapopulation dynamics unaffected with few changes to recovery metrics outside of occasionally slower recoveries. These above spatial and temporal recovery processes also appeared tied to one another such that changes to any of them had feedbacks with other recovery metrics. Perhaps intuitively, for example, patch occupancy was highly correlated to the relative production of the metapopulation, such that the more patches occupied, the more that metapopulation dynamics resembled a contiguous population. 
+
+```{r disturbance regime, echo=FALSE,fig.height=5,fig.width=5.5,fig.cap="The role of spatial disturbance regimes on metapopulation recoveries and covariation among four recovery metrics: (a,b,c) recovery rate – the annual rate of metapopulation recovery; (a,d) relative patch occupancy – the mean proportion of patches occupied 25 years after disturbance; (b,d), relative production – the ratio between the summed abundances across all patches to the expected production of an equivalent single population 25 years after disturbance; and (c) rate of non-recovery – the percent of 100 stochastic simulations where the metapopulation failed to recover. Each point represents a single simulation for a metapopulation under a unique combination of local productivity, dispersal, spatial network, stochasticity, and disturbance (9,504 total simulations). Shaded regions describe the range in recovery metrics for all simulated metapopulations and are colored by disturbance regime. Square points represent the mean recovery metrics from all simulations within each disturbance regime.",fig.align="center"}
+results <- readRDS("Simulations/results2022-05-11.rds")
+scenarios <- readRDS("Simulations/scenarios2022-05-11.rds")
+Nboots <- 100
+Nlevels <- 11
+model <- "Beverton-Holt"
+# simulation parameters
+Npatches <- 16
+patchDist <- 1
+Nburnin <- 50
+NyrsPost <- 100
+Nyears <- Nburnin+NyrsPost
+compLag <- 25 # how many years to lag estimates of compensation
+dataWeighting <- 0.1 # penalty to past years for data weighting
+m <- 100 # distance decay function: penalty of 1 says about 60% of dispersing recruits move to neighbor patches. penalty of 2 says about 90% of dispersing recruits move to neighbor patches
+# adult stock-juvenile recruitment traits
+alpha <- 2
+metaK <- 1600
+# how big is the disturbance after Nburnin years?
+magnitude_of_decline <- 0.9
+# what is the lag time between recruits and spawners
+lagTime <- 1
+
+results$StateShift <- ((1-results$recovered)+(1-results$longOcc))/2
+results$RecoveryRate <- 1-results$recovery/NyrsPost
+results$collapsed <- 100*(1-results$recovered)
+results$disturb_lab <- factor(results$disturbance,levels=levels(results$disturbance),labels=c("Uniform","Local, even","Local, uneven"))
+mean_res <- aggregate(cbind(RecoveryRate,collapsed,longOcc,long_surp)~disturb_lab,data=results,FUN=mean)
+
+dist_colours <- c("tomato","dodgerblue","orange")
+transparency <- 0.6
+plotColours <- ifelse(results$dispersal==-1,
+                           adjustcolor(dist_colours[results$disturbance],1,offset=c(-0.35,-0.35,-0.35,0)),
+                           adjustcolor(dist_colours[results$disturbance],1))
+
+layout(matrix(1:4,nrow=2,ncol=2,byrow=TRUE))
+par(mar=c(4,4,0.5,0.5))
+plot(results$RecoveryRate,results$longOcc,pch=21,bg=plotColours,xlab=expression('Recovery rate'),ylab="Relative patch occupancy (25 years)",cex.lab=0.7,cex.axis=0.85)
+
+invisible(lapply(1:length(scenarios$disturbance),FUN=function(z){polygon(findHull(df=results[results$disturbance==scenarios$disturbance[z],],x="RecoveryRate",y="longOcc"),col=adjustcolor(dist_colours[z],transparency))}))
+Corner_text("(a)", "topleft")
+points(mean_res$RecoveryRate,mean_res$longOcc,pch=22,cex=2,bg=dist_colours)
+
+plot(results$RecoveryRate,results$long_surp,pch=21,bg=plotColours,xlab=expression('Recovery rate'),ylab="Relative production (25 years)",cex.lab=0.7,cex.axis=0.85)
+invisible(lapply(1:length(scenarios$disturbance),FUN=function(z){polygon(findHull(df=results[results$disturbance==scenarios$disturbance[z],],x="RecoveryRate",y="long_surp"),col=adjustcolor(dist_colours[z],transparency))}))
+Corner_text("(b)", "topleft")
+points(mean_res$RecoveryRate,mean_res$long_surp,pch=22,cex=2,bg=dist_colours)
+
+plot(results$RecoveryRate,results$collapsed,pch=21,bg=plotColours,xlab=expression('Recovery rate'),ylab="Rate of non-recovery (% of simulations)",cex.lab=0.7,cex.axis=0.85)
+invisible(lapply(1:length(scenarios$disturbance),FUN=function(z){
+  if(z<3){polygon(findHull(df=results[results$disturbance==scenarios$disturbance[z],],x="RecoveryRate",y="collapsed"),col=adjustcolor(dist_colours[z],transparency))}else{xMat <- unique(cbind(results[results$disturbance==scenarios$disturbance[z],"RecoveryRate"],results[results$disturbance==scenarios$disturbance[z],"collapsed"]))
+  xSeq <- seq(min(xMat[,1]),max(xMat[,1]),by=0.1)
+  polyMinMax <- cbind(c(xSeq,rev(xSeq)),c(sapply(xSeq,function(x){min(xMat[abs(xMat[which.min(abs(xMat[,1]-x)),1]-xMat[,1])<=0.025,2])}),sapply(rev(xSeq),function(x){max(xMat[abs(xMat[which.min(abs(xMat[,1]-x)),1]-xMat[,1])<=0.025,2])})))
+  polygon(polyMinMax[,1],polyMinMax[,2],col=adjustcolor(dist_colours[z],transparency))}}))
+Corner_text("(c)", "topleft")
+points(mean_res$RecoveryRate,mean_res$collapsed,pch=22,cex=2,bg=dist_colours)
+
+plot(results$long_surp,results$longOcc,pch=21,bg=plotColours,xlab="Relative production (25 years)",ylab="Relative patch occupancy (25 years)",cex.lab=0.7,cex.axis=0.85)
+invisible(lapply(1:length(scenarios$disturbance),FUN=function(z){polygon(findHull(df=results[results$disturbance==scenarios$disturbance[z],],x="long_surp",y="longOcc"),col=adjustcolor(dist_colours[z],transparency))}))
+Corner_text("(d)", "topleft")
+points(mean_res$long_surp,mean_res$longOcc,pch=22,cex=2,bg=dist_colours)
+
+legend("bottomright",c("Uniform","Local, even","Local, uneven"),pch=22,pt.bg=dist_colours,bty="n",title="Disturbance regime",cex=0.8)
+```
+\newpage
+### Role of interplay in ecological and disturbance conditions on recovery patterns
+
+We now show some general patterns in how variable patch demographic rates, network structure, dispersal, disturbance, recruitment stochasticity, and spatio-temporal correlations variation affects metapopulation *recovery rates* (shown in Figure 4 of the main text and Figure S16 & S18), *non-recovery rate* (i.e, the number of simulations where the metapopulation fails to recover; Figure S19), *patch occupancy* (i.e., number of patches with local abundance <10% of pre-disturbance; Figure S20), and *relative production* (Figure S21).
+
+```{r violin plots of risk of recovery rates based on variable patch demographic rates, echo=FALSE,warning = FALSE, message = FALSE,fig.height=5.5,fig.width=6.5,fig.cap="Violin plots showing marginal response of metapopulation recovery rates along gradients of network configuration, dispersal categories (low≤0.001; high>0.001), heterogeneity in local demographic rates ($\\alpha$ was local patch productivity and $\\beta$ was local patch carrying capacity in the Beverton-Holt model), and spatial distribution of disturbance.",fig.align="center"}
+results <- readRDS("Simulations/results2022-05-11.rds")
+scenarios <- readRDS("Simulations/scenarios2022-05-11.rds")
+results$network <- factor(results$network,levels=unique(results$network),labels=c("linear","dendritic","star","grid"))
+scenarios$network <- factor(scenarios$network,levels=unique(scenarios$network),labels=c("linear","dendritic","star","grid"))
+results$StateShift <- ((1-results$recovered)+(1-results$longOcc))/2
+results$RecoveryRate <- 1-results$recovery/NyrsPost
+results$collapsed <- 1-results$recovered
+results$space_var <- factor(results$spatial,levels=unique(results$spatial),labels=c("Low spatial","Medium spatial","High spatial"))
+results$temporal_var <- factor(results$temporal,levels=unique(results$temporal),labels=c("Low temporal","Medium temporal","High temporal"))
+results$stochastic_lab <- factor(results$stochastic,levels=unique(results$stochastic),labels=c("Low variance","High variance"))
+results$variance_scen <- paste(results$space_var,results$temporal_var,results$stochastic_lab,sep="\n")
+results$unrecovered <- factor(ifelse(results$metaAbund >=0.9,"Recovered",ifelse(results$metaAbund>=0.7,"Recovering","Collapsed")),levels=c("Recovered","Recovering","Collapsed"))
+results$recovery_pace <- factor(ifelse(results$recovery <=10,"Fast",ifelse(results$recovery<=25,"Moderate","Slow")),levels=c("Fast","Moderate","Slow"))
+results$contraction <- factor(ifelse(results$longOcc >=0.9,"Full",ifelse(results$longOcc >=0.75,"Filling","Contracted")),levels=c("Full","Filling","Contracted"))
+results$masked <- factor(ifelse(results$unrecovered!="Collapsed" & results$longOcc <= 0.5,"Hidden collapses","Good monitoring"),levels=c("Good monitoring","Hidden collapses"))
+results$lostCap <- factor(ifelse(results$long_surp <=0.5,"Lost capacity","Healthy"),levels=c("Healthy","Lost capacity"))
+
+results$collapse_logic <- factor(ifelse(results$metaAbund <= 0.10, "Wide collapse","Healthy"),levels=c("Healthy","Wide collapse"))
+
+results$outcome <- factor(paste(results$unrecovered,results$recovery_pace,results$contraction,results$masked,results$lostCap,results$collapse_logic))
+results$surprise <- factor(ifelse(grepl("Wide collapse",results$outcome),"Critical risk",
+                                  ifelse(grepl("Contracted",results$outcome) & !grepl("Recovered",results$unrecovered),"Spatial contraction",
+                                         ifelse(grepl("Hidden",results$outcome),"Hidden collapses",
+                                                ifelse(grepl("Lost capacity",results$outcome),"Lost capacity",
+                                                       ifelse(grepl("Fast",results$outcome) & grepl("Recover",results$outcome),"Resilient","Slow recovery"))))),levels=c("Resilient","Slow recovery","Lost capacity","Hidden collapses","Spatial contraction","Critical risk"))
+results$dispersal_range <- factor(ifelse(results$dispersal>=0.001,"High","Low"),levels=c("High","Low"))
+results$network_lab <- factor(results$network,levels=levels(results$network),labels=c("Linear","Dendritic","Star","Grid"))
+results$disturb_lab <- factor(results$disturbance,levels=levels(results$disturbance),labels=c("Uniform","Local, even","Local, uneven"))
+results$density_dep <- factor(results$alpha,levels=levels(results$alpha),labels=c("Identical","Diverse"))
+results$collapsed <- 100*(1-results$recovered)
+
+# http://www.sthda.com/english/wiki/ggplot2-violin-plot-quick-start-guide-r-software-and-data-visualization
+results$patchScen <- paste(results$alpha,"\u03B1","\n",results$beta,"\u03B2")
+results$stochasticity <- as.character(results$stochastic)
+sub_res <- results[results$variance_scen %in% c("High spatial\nHigh temporal\nLow variance","High spatial\nHigh temporal\nHigh variance","Low spatial\nLow temporal\nLow variance","Low spatial\nLow temporal\nHigh variance") & results$dispersal!=0,]
+
+sub_res$variance_scen <- factor(sub_res$variance_scen,
+                                levels=c("Low spatial\nLow temporal\nLow variance",
+                                         "Low spatial\nLow temporal\nHigh variance",
+                                         "High spatial\nHigh temporal\nLow variance",
+                                         "High spatial\nHigh temporal\nHigh variance"),
+                                labels=c("Low ST \u03C1, Low \u03C3",
+                                         "Low ST \u03C1, High \u03C3",
+                                         "High ST \u03C1, Low \u03C3",
+                                         "High ST \u03C1, High \u03C3"))
+sub_res$dispersal_range <- factor(sub_res$dispersal_range,levels=c("Low","High"))
+p <- ggplot(data=sub_res, aes(x=dispersal_range, y=RecoveryRate, fill=network_lab))+ 
+  geom_violin(trim=TRUE,scale = "width")+
+  geom_boxplot(width=0.3,colour="grey90",outlier.shape=NA,position=position_dodge(0.9))+
+  #geom_jitter(pch=21,width=0.1)+
+  facet_grid(rows=vars(disturb_lab),cols=vars(patchScen),labeller=label_wrap_gen(width=45,multi_line = TRUE)) +
+  scale_fill_brewer(palette="BrBG") +
+  labs(x="Dispersal rate",y=expression('Recovery rate'),fill="Habitat network") +
+  theme_minimal() +
+  theme(legend.position="top",text = element_text(size=11),strip.text.x = element_text(hjust=0),legend.key.size = unit(0.9, "line"),panel.spacing.y = unit(0.75, "lines"))
+p
+```
+
+```{r violin plots of risk of recovery rates, echo=FALSE,warning = FALSE, message = FALSE,fig.height=5.5,fig.width=6.5,fig.cap="Violin plots showing marginal response of metapopulation recovery rates along gradients of network configuration, dispersal categories (low≤0.001; high>0.001), spatial-temporal (ST) correlations (low $\\rho$≈0; high $\\rho$=0.6), scale of lognormal variance in recruitment (low $\\sigma$= 0.001; high $\\sigma$=0.1), and spatial distribution of disturbance.",fig.align="center"}
+results <- readRDS("Simulations/results2022-05-11.rds")
+scenarios <- readRDS("Simulations/scenarios2022-05-11.rds")
+results$network <- factor(results$network,levels=unique(results$network),labels=c("linear","dendritic","star","grid"))
+scenarios$network <- factor(scenarios$network,levels=unique(scenarios$network),labels=c("linear","dendritic","star","grid"))
+results$StateShift <- ((1-results$recovered)+(1-results$longOcc))/2
+results$RecoveryRate <- 1-results$recovery/NyrsPost
+results$collapsed <- 1-results$recovered
+results$space_var <- factor(results$spatial,levels=unique(results$spatial),labels=c("Low spatial","Medium spatial","High spatial"))
+results$temporal_var <- factor(results$temporal,levels=unique(results$temporal),labels=c("Low temporal","Medium temporal","High temporal"))
+results$stochastic_lab <- factor(results$stochastic,levels=unique(results$stochastic),labels=c("Low variance","High variance"))
+results$variance_scen <- paste(results$space_var,results$temporal_var,results$stochastic_lab,sep="\n")
+results$unrecovered <- factor(ifelse(results$metaAbund >=0.9,"Recovered",ifelse(results$metaAbund>=0.7,"Recovering","Collapsed")),levels=c("Recovered","Recovering","Collapsed"))
+results$recovery_pace <- factor(ifelse(results$recovery <=10,"Fast",ifelse(results$recovery<=25,"Moderate","Slow")),levels=c("Fast","Moderate","Slow"))
+results$contraction <- factor(ifelse(results$longOcc >=0.9,"Full",ifelse(results$longOcc >=0.75,"Filling","Contracted")),levels=c("Full","Filling","Contracted"))
+results$masked <- factor(ifelse(results$unrecovered!="Collapsed" & results$longOcc <= 0.5,"Hidden collapses","Good monitoring"),levels=c("Good monitoring","Hidden collapses"))
+results$lostCap <- factor(ifelse(results$long_surp <=0.5,"Lost capacity","Healthy"),levels=c("Healthy","Lost capacity"))
+
+results$collapse_logic <- factor(ifelse(results$metaAbund <= 0.10, "Wide collapse","Healthy"),levels=c("Healthy","Wide collapse"))
+
+results$outcome <- factor(paste(results$unrecovered,results$recovery_pace,results$contraction,results$masked,results$lostCap,results$collapse_logic))
+results$surprise <- factor(ifelse(grepl("Wide collapse",results$outcome),"Critical risk",
+                                  ifelse(grepl("Contracted",results$outcome) & !grepl("Recovered",results$unrecovered),"Spatial contraction",
+                                         ifelse(grepl("Hidden",results$outcome),"Hidden collapses",
+                                                ifelse(grepl("Lost capacity",results$outcome),"Lost capacity",
+                                                       ifelse(grepl("Fast",results$outcome) & grepl("Recover",results$outcome),"Resilient","Slow recovery"))))),levels=c("Resilient","Slow recovery","Lost capacity","Hidden collapses","Spatial contraction","Critical risk"))
+results$dispersal_range <- factor(ifelse(results$dispersal>=0.001,"High","Low"),levels=c("High","Low"))
+results$network_lab <- factor(results$network,levels=levels(results$network),labels=c("Linear","Dendritic","Star","Grid"))
+results$disturb_lab <- factor(results$disturbance,levels=levels(results$disturbance),labels=c("Uniform","Local, even","Local, uneven"))
+results$density_dep <- factor(results$alpha,levels=levels(results$alpha),labels=c("Identical","Diverse"))
+results$collapsed <- 100*(1-results$recovered)
+
+# http://www.sthda.com/english/wiki/ggplot2-violin-plot-quick-start-guide-r-software-and-data-visualization
+results$patchScen <- paste(results$alpha,"\u03B1","\n",results$beta,"\u03B2")
+results$stochasticity <- as.character(results$stochastic)
+sub_res <- results[results$variance_scen %in% c("High spatial\nHigh temporal\nLow variance","High spatial\nHigh temporal\nHigh variance","Low spatial\nLow temporal\nLow variance","Low spatial\nLow temporal\nHigh variance") & results$dispersal!=0,]
+
+sub_res$variance_scen <- factor(sub_res$variance_scen,
+                                levels=c("Low spatial\nLow temporal\nLow variance",
+                                         "Low spatial\nLow temporal\nHigh variance",
+                                         "High spatial\nHigh temporal\nLow variance",
+                                         "High spatial\nHigh temporal\nHigh variance"),
+                                labels=c("Low ST \u03C1, Low \u03C3",
+                                         "Low ST \u03C1, High \u03C3",
+                                         "High ST \u03C1, Low \u03C3",
+                                         "High ST \u03C1, High \u03C3"))
+sub_res$dispersal_range <- factor(sub_res$dispersal_range,levels=c("Low","High"))
+p <- ggplot(data=sub_res, aes(x=dispersal_range, y=RecoveryRate, fill=network_lab))+ 
+  geom_violin(trim=TRUE,scale = "width")+
+  geom_boxplot(width=0.3,colour="grey90",outlier.shape=NA,position=position_dodge(0.9))+
+  #geom_jitter(pch=21,width=0.1)+
+  facet_grid(rows=vars(disturb_lab),cols=vars(variance_scen),labeller=label_wrap_gen(width=45,multi_line = TRUE)) +
+  scale_fill_brewer(palette="BrBG") +
+  labs(x="Dispersal rate",y=expression('Recovery rate'),fill="Habitat network") +
+  theme_minimal() +
+  theme(legend.position="top",text = element_text(size=11),strip.text.x = element_text(hjust=0),legend.key.size = unit(0.9, "line"),panel.spacing.y = unit(0.75, "lines"))
+p
+```
+Next, we show violin plots demonstrating some of the modulating factors leading to variation in the risk of non-recovery owing to stochastic recruitment dynamics.
+
+```{r violin plots of risk of non-recovery, echo=FALSE,warning = FALSE, message = FALSE,fig.height=5.5,fig.width=6.5,fig.cap="Violin plots showing marginal response of the stochastic risk of non-recovery in metapopulations along gradients of network configuration, dispersal categories (low≤0.001; high>0.001), spatial-temporal (ST) correlations (low $\\rho$≈0; high $\\rho$=0.6), scale of lognormal variance in recruitment (low $\\sigma$= 0.001; high $\\sigma$=0.1), and spatial distribution of disturbance.",fig.align="center"}
+results <- readRDS("Simulations/results2022-05-11.rds")
+scenarios <- readRDS("Simulations/scenarios2022-05-11.rds")
+results$network <- factor(results$network,levels=unique(results$network),labels=c("linear","dendritic","star","grid"))
+scenarios$network <- factor(scenarios$network,levels=unique(scenarios$network),labels=c("linear","dendritic","star","grid"))
+results$StateShift <- ((1-results$recovered)+(1-results$longOcc))/2
+results$RecoveryRate <- 1-results$recovery/NyrsPost
+results$collapsed <- 1-results$recovered
+results$space_var <- factor(results$spatial,levels=unique(results$spatial),labels=c("Low spatial","Medium spatial","High spatial"))
+results$temporal_var <- factor(results$temporal,levels=unique(results$temporal),labels=c("Low temporal","Medium temporal","High temporal"))
+results$stochastic_lab <- factor(results$stochastic,levels=unique(results$stochastic),labels=c("Low variance","High variance"))
+results$variance_scen <- paste(results$space_var,results$temporal_var,results$stochastic_lab,sep="\n")
+results$unrecovered <- factor(ifelse(results$metaAbund >=0.9,"Recovered",ifelse(results$metaAbund>=0.7,"Recovering","Collapsed")),levels=c("Recovered","Recovering","Collapsed"))
+results$recovery_pace <- factor(ifelse(results$recovery <=10,"Fast",ifelse(results$recovery<=25,"Moderate","Slow")),levels=c("Fast","Moderate","Slow"))
+results$contraction <- factor(ifelse(results$longOcc >=0.9,"Full",ifelse(results$longOcc >=0.75,"Filling","Contracted")),levels=c("Full","Filling","Contracted"))
+results$masked <- factor(ifelse(results$unrecovered!="Collapsed" & results$longOcc <= 0.5,"Hidden collapses","Good monitoring"),levels=c("Good monitoring","Hidden collapses"))
+results$lostCap <- factor(ifelse(results$long_surp <=0.5,"Lost capacity","Healthy"),levels=c("Healthy","Lost capacity"))
+
+results$collapse_logic <- factor(ifelse(results$metaAbund <= 0.10, "Wide collapse","Healthy"),levels=c("Healthy","Wide collapse"))
+
+results$outcome <- factor(paste(results$unrecovered,results$recovery_pace,results$contraction,results$masked,results$lostCap,results$collapse_logic))
+results$surprise <- factor(ifelse(grepl("Wide collapse",results$outcome),"Critical risk",
+                                  ifelse(grepl("Contracted",results$outcome) & !grepl("Recovered",results$unrecovered),"Spatial contraction",
+                                         ifelse(grepl("Hidden",results$outcome),"Hidden collapses",
+                                                ifelse(grepl("Lost capacity",results$outcome),"Lost capacity",
+                                                       ifelse(grepl("Fast",results$outcome) & grepl("Recover",results$outcome),"Resilient","Slow recovery"))))),levels=c("Resilient","Slow recovery","Lost capacity","Hidden collapses","Spatial contraction","Critical risk"))
+results$dispersal_range <- factor(ifelse(results$dispersal>=0.001,"High","Low"),levels=c("High","Low"))
+results$network_lab <- factor(results$network,levels=levels(results$network),labels=c("Linear","Dendritic","Star","Grid"))
+results$disturb_lab <- factor(results$disturbance,levels=levels(results$disturbance),labels=c("Uniform","Local, even","Local, uneven"))
+results$density_dep <- factor(results$alpha,levels=levels(results$alpha),labels=c("Identical","Diverse"))
+results$collapsed <- 100*(1-results$recovered)
+
+# http://www.sthda.com/english/wiki/ggplot2-violin-plot-quick-start-guide-r-software-and-data-visualization
+results$patchScen <- paste(results$alpha,"\u03B1","\n",results$beta,"\u03B2")
+results$stochasticity <- as.character(results$stochastic)
+sub_res <- results[results$variance_scen %in% c("High spatial\nHigh temporal\nLow variance","High spatial\nHigh temporal\nHigh variance","Low spatial\nLow temporal\nLow variance","Low spatial\nLow temporal\nHigh variance") & results$dispersal!=0,]
+
+sub_res$variance_scen <- factor(sub_res$variance_scen,
+                                levels=c("Low spatial\nLow temporal\nLow variance",
+                                         "Low spatial\nLow temporal\nHigh variance",
+                                         "High spatial\nHigh temporal\nLow variance",
+                                         "High spatial\nHigh temporal\nHigh variance"),
+                                labels=c("Low ST \u03C1, Low \u03C3",
+                                         "Low ST \u03C1, High \u03C3",
+                                         "High ST \u03C1, Low \u03C3",
+                                         "High ST \u03C1, High \u03C3"))
+sub_res$dispersal_range <- factor(sub_res$dispersal_range,levels=c("Low","High"))
+p <- ggplot(data=sub_res, aes(x=dispersal_range, y=collapsed, fill=network_lab))+ 
+  geom_violin(trim=TRUE,scale = "width")+
+  geom_boxplot(width=0.3,colour="grey90",outlier.shape=NA,position=position_dodge(0.9))+
+  #geom_jitter(pch=21,width=0.1)+
+  facet_grid(rows=vars(disturb_lab),cols=vars(variance_scen),labeller=label_wrap_gen(width=45,multi_line = TRUE)) +
+  scale_fill_brewer(palette="BrBG") +
+  labs(x="Dispersal rate",y="Rate of non-recovery (% of simulations)",fill="Habitat network") +
+  theme_minimal() +
+  theme(legend.position="top",text = element_text(size=11),strip.text.x = element_text(hjust=0),legend.key.size = unit(0.9, "line"),panel.spacing.y = unit(0.75, "lines"))
+p
+```
+Next, we show violin plots demonstrating some of the modulating factors leading to variation in long-term impacts to patch occupancy.
+```{r violin plots of risk of patch occupancy, echo=FALSE,warning = FALSE, message = FALSE,fig.height=5.5,fig.width=6.5,fig.cap="Violin plots showing marginal response of long-term patch occupancy in metapopulations along gradients of network configuration, dispersal categories (low≤0.001; high>0.001), spatial-temporal (ST) correlations (low $\\rho$≈0; high $\\rho$=0.6), scale of lognormal variance in recruitment (low $\\sigma$= 0.001; high $\\sigma$=0.1), and spatial distribution of disturbance.",fig.align="center"}
+results <- readRDS("Simulations/results2022-05-11.rds")
+scenarios <- readRDS("Simulations/scenarios2022-05-11.rds")
+results$network <- factor(results$network,levels=unique(results$network),labels=c("linear","dendritic","star","grid"))
+scenarios$network <- factor(scenarios$network,levels=unique(scenarios$network),labels=c("linear","dendritic","star","grid"))
+results$StateShift <- ((1-results$recovered)+(1-results$longOcc))/2
+results$RecoveryRate <- 1-results$recovery/NyrsPost
+results$collapsed <- 1-results$recovered
+results$space_var <- factor(results$spatial,levels=unique(results$spatial),labels=c("Low spatial","Medium spatial","High spatial"))
+results$temporal_var <- factor(results$temporal,levels=unique(results$temporal),labels=c("Low temporal","Medium temporal","High temporal"))
+results$stochastic_lab <- factor(results$stochastic,levels=unique(results$stochastic),labels=c("Low variance","High variance"))
+results$variance_scen <- paste(results$space_var,results$temporal_var,results$stochastic_lab,sep="\n")
+results$unrecovered <- factor(ifelse(results$metaAbund >=0.9,"Recovered",ifelse(results$metaAbund>=0.7,"Recovering","Collapsed")),levels=c("Recovered","Recovering","Collapsed"))
+results$recovery_pace <- factor(ifelse(results$recovery <=10,"Fast",ifelse(results$recovery<=25,"Moderate","Slow")),levels=c("Fast","Moderate","Slow"))
+results$contraction <- factor(ifelse(results$longOcc >=0.9,"Full",ifelse(results$longOcc >=0.75,"Filling","Contracted")),levels=c("Full","Filling","Contracted"))
+results$masked <- factor(ifelse(results$unrecovered!="Collapsed" & results$longOcc <= 0.5,"Hidden collapses","Good monitoring"),levels=c("Good monitoring","Hidden collapses"))
+results$lostCap <- factor(ifelse(results$long_surp <=0.5,"Lost capacity","Healthy"),levels=c("Healthy","Lost capacity"))
+
+results$collapse_logic <- factor(ifelse(results$metaAbund <= 0.10, "Wide collapse","Healthy"),levels=c("Healthy","Wide collapse"))
+
+results$outcome <- factor(paste(results$unrecovered,results$recovery_pace,results$contraction,results$masked,results$lostCap,results$collapse_logic))
+results$surprise <- factor(ifelse(grepl("Wide collapse",results$outcome),"Critical risk",
+                                  ifelse(grepl("Contracted",results$outcome) & !grepl("Recovered",results$unrecovered),"Spatial contraction",
+                                         ifelse(grepl("Hidden",results$outcome),"Hidden collapses",
+                                                ifelse(grepl("Lost capacity",results$outcome),"Lost capacity",
+                                                       ifelse(grepl("Fast",results$outcome) & grepl("Recover",results$outcome),"Resilient","Slow recovery"))))),levels=c("Resilient","Slow recovery","Lost capacity","Hidden collapses","Spatial contraction","Critical risk"))
+results$dispersal_range <- factor(ifelse(results$dispersal>=0.001,"High","Low"),levels=c("High","Low"))
+results$network_lab <- factor(results$network,levels=levels(results$network),labels=c("Linear","Dendritic","Star","Grid"))
+results$disturb_lab <- factor(results$disturbance,levels=levels(results$disturbance),labels=c("Uniform","Local, even","Local, uneven"))
+results$density_dep <- factor(results$alpha,levels=levels(results$alpha),labels=c("Identical","Diverse"))
+results$collapsed <- 100*(1-results$recovered)
+
+# http://www.sthda.com/english/wiki/ggplot2-violin-plot-quick-start-guide-r-software-and-data-visualization
+results$patchScen <- paste(results$alpha,"\u03B1","\n",results$beta,"\u03B2")
+results$stochasticity <- as.character(results$stochastic)
+sub_res <- results[results$variance_scen %in% c("High spatial\nHigh temporal\nLow variance","High spatial\nHigh temporal\nHigh variance","Low spatial\nLow temporal\nLow variance","Low spatial\nLow temporal\nHigh variance") & results$dispersal!=0,]
+
+sub_res$variance_scen <- factor(sub_res$variance_scen,
+                                levels=c("Low spatial\nLow temporal\nLow variance",
+                                         "Low spatial\nLow temporal\nHigh variance",
+                                         "High spatial\nHigh temporal\nLow variance",
+                                         "High spatial\nHigh temporal\nHigh variance"),
+                                labels=c("Low ST \u03C1, Low \u03C3",
+                                         "Low ST \u03C1, High \u03C3",
+                                         "High ST \u03C1, Low \u03C3",
+                                         "High ST \u03C1, High \u03C3"))
+sub_res$dispersal_range <- factor(sub_res$dispersal_range,levels=c("Low","High"))
+p <- ggplot(data=sub_res, aes(x=dispersal_range, y=longOcc, fill=network_lab))+ 
+  geom_violin(trim=TRUE,scale = "width")+
+  geom_boxplot(width=0.3,colour="grey90",outlier.shape=NA,position=position_dodge(0.9))+
+  #geom_jitter(pch=21,width=0.1)+
+  facet_grid(rows=vars(disturb_lab),cols=vars(variance_scen),labeller=label_wrap_gen(width=45,multi_line = TRUE)) +
+  scale_fill_brewer(palette="BrBG") +
+  labs(x="Dispersal rate",y="Patch occupancy (25 years)",fill="Habitat network") +
+  theme_minimal() +
+  theme(legend.position="top",text = element_text(size=11),strip.text.x = element_text(hjust=0),legend.key.size = unit(0.9, "line"),panel.spacing.y = unit(0.75, "lines"))
+p
+```
+
+Next, we show variation in relative production metrics. Figure S16 shows the tight correlation between patch occupancy and relative production. Hence, Figure S20 and S21 look quite similar.
+```{r violin plots of risk of relative production, echo=FALSE,warning = FALSE, message = FALSE,fig.height=5.5,fig.width=6.5,fig.cap="Violin plots showing marginal response of relative production for metapopulations along gradients of network configuration, dispersal categories (low≤0.001; high>0.001), spatial-temporal (ST) correlations (low $\\rho$≈0; high $\\rho$=0.6), scale of lognormal variance in recruitment (low $\\sigma$= 0.001; high $\\sigma$=0.1), and spatial distribution of disturbance.",fig.align="center"}
+results <- readRDS("Simulations/results2022-05-11.rds")
+scenarios <- readRDS("Simulations/scenarios2022-05-11.rds")
+results$network <- factor(results$network,levels=unique(results$network),labels=c("linear","dendritic","star","grid"))
+scenarios$network <- factor(scenarios$network,levels=unique(scenarios$network),labels=c("linear","dendritic","star","grid"))
+results$StateShift <- ((1-results$recovered)+(1-results$longOcc))/2
+results$RecoveryRate <- 1-results$recovery/NyrsPost
+results$collapsed <- 1-results$recovered
+results$space_var <- factor(results$spatial,levels=unique(results$spatial),labels=c("Low spatial","Medium spatial","High spatial"))
+results$temporal_var <- factor(results$temporal,levels=unique(results$temporal),labels=c("Low temporal","Medium temporal","High temporal"))
+results$stochastic_lab <- factor(results$stochastic,levels=unique(results$stochastic),labels=c("Low variance","High variance"))
+results$variance_scen <- paste(results$space_var,results$temporal_var,results$stochastic_lab,sep="\n")
+results$unrecovered <- factor(ifelse(results$metaAbund >=0.9,"Recovered",ifelse(results$metaAbund>=0.7,"Recovering","Collapsed")),levels=c("Recovered","Recovering","Collapsed"))
+results$recovery_pace <- factor(ifelse(results$recovery <=10,"Fast",ifelse(results$recovery<=25,"Moderate","Slow")),levels=c("Fast","Moderate","Slow"))
+results$contraction <- factor(ifelse(results$longOcc >=0.9,"Full",ifelse(results$longOcc >=0.75,"Filling","Contracted")),levels=c("Full","Filling","Contracted"))
+results$masked <- factor(ifelse(results$unrecovered!="Collapsed" & results$longOcc <= 0.5,"Hidden collapses","Good monitoring"),levels=c("Good monitoring","Hidden collapses"))
+results$lostCap <- factor(ifelse(results$long_surp <=0.5,"Lost capacity","Healthy"),levels=c("Healthy","Lost capacity"))
+
+results$collapse_logic <- factor(ifelse(results$metaAbund <= 0.10, "Wide collapse","Healthy"),levels=c("Healthy","Wide collapse"))
+
+results$outcome <- factor(paste(results$unrecovered,results$recovery_pace,results$contraction,results$masked,results$lostCap,results$collapse_logic))
+results$surprise <- factor(ifelse(grepl("Wide collapse",results$outcome),"Critical risk",
+                                  ifelse(grepl("Contracted",results$outcome) & !grepl("Recovered",results$unrecovered),"Spatial contraction",
+                                         ifelse(grepl("Hidden",results$outcome),"Hidden collapses",
+                                                ifelse(grepl("Lost capacity",results$outcome),"Lost capacity",
+                                                       ifelse(grepl("Fast",results$outcome) & grepl("Recover",results$outcome),"Resilient","Slow recovery"))))),levels=c("Resilient","Slow recovery","Lost capacity","Hidden collapses","Spatial contraction","Critical risk"))
+results$dispersal_range <- factor(ifelse(results$dispersal>=0.001,"High","Low"),levels=c("High","Low"))
+results$network_lab <- factor(results$network,levels=levels(results$network),labels=c("Linear","Dendritic","Star","Grid"))
+results$disturb_lab <- factor(results$disturbance,levels=levels(results$disturbance),labels=c("Uniform","Local, even","Local, uneven"))
+results$density_dep <- factor(results$alpha,levels=levels(results$alpha),labels=c("Identical","Diverse"))
+results$collapsed <- 100*(1-results$recovered)
+
+# http://www.sthda.com/english/wiki/ggplot2-violin-plot-quick-start-guide-r-software-and-data-visualization
+results$patchScen <- paste(results$alpha,"\u03B1","\n",results$beta,"\u03B2")
+results$stochasticity <- as.character(results$stochastic)
+sub_res <- results[results$variance_scen %in% c("High spatial\nHigh temporal\nLow variance","High spatial\nHigh temporal\nHigh variance","Low spatial\nLow temporal\nLow variance","Low spatial\nLow temporal\nHigh variance") & results$dispersal!=0,]
+
+sub_res$variance_scen <- factor(sub_res$variance_scen,
+                                levels=c("Low spatial\nLow temporal\nLow variance",
+                                         "Low spatial\nLow temporal\nHigh variance",
+                                         "High spatial\nHigh temporal\nLow variance",
+                                         "High spatial\nHigh temporal\nHigh variance"),
+                                labels=c("Low ST \u03C1, Low \u03C3",
+                                         "Low ST \u03C1, High \u03C3",
+                                         "High ST \u03C1, Low \u03C3",
+                                         "High ST \u03C1, High \u03C3"))
+sub_res$dispersal_range <- factor(sub_res$dispersal_range,levels=c("Low","High"))
+p <- ggplot(data=sub_res, aes(x=dispersal_range, y=long_surp, fill=network_lab))+ 
+  geom_violin(trim=TRUE,scale = "width")+
+  geom_boxplot(width=0.3,colour="grey90",outlier.shape=NA,position=position_dodge(0.9))+
+  #geom_jitter(pch=21,width=0.1)+
+  facet_grid(rows=vars(disturb_lab),cols=vars(variance_scen),labeller=label_wrap_gen(width=45,multi_line = TRUE)) +
+  scale_fill_brewer(palette="BrBG") +
+  labs(x="Dispersal rate",y="Relative production (25 years)",fill="Habitat network") +
+  theme_minimal() +
+  theme(legend.position="top",text = element_text(size=11),strip.text.x = element_text(hjust=0),legend.key.size = unit(0.9, "line"),panel.spacing.y = unit(0.75, "lines"))
+p
+```
+
+Dispersal, network topology, variable local demography, spatial-temporal correlations, and recruitment stochasticity also affected metapopulation recovery patterns in three key ways, though to a lesser extent. First, recovery rates increased with increased dispersal. However, this effect was nonlinear with diminishing benefits of dispersal occurring at ~1-3%, depending on spatial structure and disturbance. Second, more linearized networks had slower recovery times than more connected networks suggesting that rescue effects take some time to cascade through the entire network of patches; but this interacted with the disturbance regime as only local, extirpation exhibited this change in any substantial manner. Last, diversity in local patch compensation and carrying capacities tended to slow metapopulation recoveries - this effect interacted with other factors like stochasticity.
+
+\newpage
+## Clustering analyses
+
+We used hierarchical clustering analyses (implementing Ward's criterion) of a dissimilarity matrix from our four recovery metrics to evaluate whether there was evidence for common recovery regimes among our simulation results across all ecological and disturbance scenarios  [@Murtagh2014]. Based on advice laid out in @Hennig2014, we determined that the best number of unique clusters in metapopulation recoveries should satisfy the following statistical criteria:
+
+1. recovery outcomes from within a cluster are closer to one another than to other clusters (i.e., the two Dunn indices are relatively high)
+2. the number of clusters explains much of the point variation within the dataset (i.e., diminishing returns in minimizing the sums-of-squared residuals)
+3. the point observations within clusters are relatively tight (i.e., both the average silhouette width and the widest within-cluster gap are relatively low)
+4. clusters are relatively unique and there is good separation between the clusters (i.e., the separation index is still high, while considering that low numbers of clusters should always have the highest separation)
+
+
+```{r clustering analysis, echo=FALSE,warning = FALSE, message = FALSE,fig.height=4.5,fig.width=7,fig.cap="The relationships between number of potential clusters and multiple statistical criteria used to test support for the best number of clusters within the simulated recovery outcomes.",fig.align="center"}
+cluster_res <- readRDS("Simulations/cluster_test.rds")
+layout(matrix(c(1:6),nrow=2,ncol=3,byrow=TRUE))
+par(mar=c(5,4,0.25,0.25))
+opt_k <- cluster_res$k_vec
+
+plot(cluster_res$k_vec,cluster_res$dunnInd, xlab=cluster_res$xlabel, ylab="Dunn index (version 1)", type="l")
+points(opt_k,cluster_res$dunnInd[opt_k-1],pch=21,bg=(opt_k))
+
+plot(cluster_res$k_vec,cluster_res$dunn2, xlab=cluster_res$xlabel, ylab="Dunn index (version 2)", type="l")
+points(opt_k,cluster_res$dunn2[opt_k-1],pch=21,bg=(opt_k))
+
+#plot(cluster_res$k_vec,cluster_res$gamma, xlab=cluster_res$xlabel, ylab="Normalized gamma", type="l")
+#points(opt_k,cluster_res$gamma[opt_k-1],pch=21,bg=(opt_k))
+
+plot(cluster_res$k_vec,cluster_res$silWidth, xlab=cluster_res$xlabel, ylab="Average Silhoette Width", type="l")
+points(opt_k,cluster_res$silWidth[opt_k-1],pch=21,bg=(opt_k))
+
+plot(cluster_res$k_vec,cluster_res$clus.SS, xlab=cluster_res$xlabel, ylab="Sum of squares residuals", type="l")
+points(opt_k,cluster_res$clus.SS[opt_k-1],pch=21,bg=(opt_k))
+
+plot(cluster_res$k_vec,cluster_res$widGap, xlab=cluster_res$xlabel, ylab="Widest within-cluster gap", type="l")
+points(opt_k,cluster_res$widGap[opt_k-1],pch=21,bg=(opt_k))
+
+plot(cluster_res$k_vec,cluster_res$separat, xlab=cluster_res$xlabel, ylab="Separation Index", type="l")
+points(opt_k,cluster_res$separat[opt_k-1],pch=21,bg=(opt_k))
+
+```
+
+Based on the above criteria, we chose 5 unique clusters as satisfying most of the above criteria in the figure above, although there was good support for between 3 and 6 unique clusters. The principal components analysis indicates that five clusters has substantial explanatory power of metapopulation recovery metrics (explained ~89% of the point variation).
+
+```{r clustering plot, echo=FALSE,warning = FALSE, message = FALSE,fig.height=4.5,fig.width=4.5,fig.cap="Bivariate cluster plot of the principal components explaining point variation in metapopulaton recovery metrics acrosss all simulated scenarios grouped into five distinct clusters.",fig.align="center"}
+results <- readRDS("Figures/clustering_outcomes.rds")
+layout(matrix(1,nrow=1,ncol=1))
+results_clust <- data.frame(scale(results[,c("RecoveryRate","collapsed","medOcc","med_surp","longOcc","long_surp","metaAbund")],center = TRUE,scale = TRUE))
+fitted <- readRDS("Simulations/clustering result.rds")
+results_clust$cluster_surprises <- results$cluster_surprises <- as.factor(fitted$groups)
+results$cluster_surprises <- factor(results$cluster_surprises,levels=1:5,labels=c("Resilient","Critical risk","Hidden collapses","Slow recovery","Lost capacity"))
+results$cluster_surprises <- factor(results$cluster_surprises,levels=c("Resilient","Slow recovery","Hidden collapses","Lost capacity","Critical risk"))
+
+colGrad <- rev(c("black","#bd0026","#fdae61","dodgerblue","forestgreen"))
+colP <- colGrad[as.numeric(results$cluster_surprises)]
+cluster::clusplot(results_clust[,-ncol(results_clust)],color=FALSE, clus = results$cluster_surprises, shade=TRUE, labels=5, lines=1, main="", plotchar=TRUE,cex=0.7,sub="",cex.axis=0.7,col.p=colP,col.clus=colGrad[c(5,3,4,1,2)],cex.lab=0.6)
+```
+
+### Emergent recovery outcomes
+Overall, we used hierarchical clustering analyses to describe five common metapopulation recovery outcomes. These outcomes were: (1) resilient recovery – metapopulations recovered to pre-disturbance abundances quickly with all patches occupied, (2) slow recovery – were either slowed (compared to resilient recoveries), had reduced patch occupancy, or reduced relative production, (3) hidden collapses – metapopulations tended to recover and aggregate abundances were high, but many local patches remained unoccupied and recovery was slowed, (4) lost capacity – recovery rates were very slow, the risk of non-recovery was high, long-term production was low, and many local patches remained unoccupied and (5) critical risk – where metapopulations failed to recover, abundances remained low, and the risk of non-recovery was high.
+```{r clustering table, echo=FALSE,warning = FALSE, message = FALSE,results='asis'}
+results <- readRDS("Figures/clustering_outcomes.rds")
+layout(matrix(1,nrow=1,ncol=1))
+results_clust <- data.frame(scale(results[,c("RecoveryRate","collapsed","medOcc","med_surp","longOcc","long_surp","metaAbund")],center = TRUE,scale = TRUE))
+fitted <- readRDS("Simulations/clustering result.rds")
+results_clust$cluster_surprises <- results$cluster_surprises <- as.factor(fitted$groups)
+results$cluster_surprises <- factor(results$cluster_surprises,levels=1:5,labels=c("Resilient","Critical risk","Hidden collapses","Slow recovery","Lost capacity"))
+results$cluster_surprises <- factor(results$cluster_surprises,levels=c("Resilient","Slow recovery","Hidden collapses","Lost capacity","Critical risk"))
+results$total <- 1
+df <- aggregate(cbind(RecoveryRate,collapsed,longOcc,long_surp,metaAbund)~network_lab+disturb_lab+cluster_surprises,data=results,FUN=mean)
+df$freq <- aggregate(total~network_lab+disturb_lab+cluster_surprises,data=results,FUN=function(x){sum(x)})$total
+colnames(df) <- c("Network","Disturbance","Regime","Recovery rate","% non-recovery","Occupancy","Relative production","Relative abundance","No.")
+df <- df[,c("Regime","Network","Disturbance","No.","Recovery rate","% non-recovery","Occupancy","Relative production","Relative abundance")]
+
+linesep<-function(x,y=character()){
+  if(!length(x))
+    return(y)
+  linesep(x[-length(x)], c(rep('',x[length(x)]-1),'\\addlinespace',y))  
+}
+
+knitr::kable(df,caption = 'The mean recovery metrics, total sample size per regime (No.), and metapopulation abundance (N/K) for each of five common metapopulation recovery regimes supported by hierarchical clustering analyses across gradients in disturbance and network structure.',digits=c(0,0,0,0,2,0,2,2,2),booktabs=TRUE, longtable = TRUE,align='lllcccccc',linesep=linesep(c(8,8,7,4,4))) %>% kableExtra::column_spec(column = c(1), width = "2.75cm") %>% kableExtra::column_spec(column = 3, width = "2.25cm") %>%   kableExtra::column_spec(column = c(2,5,7), width = "1.4cm") %>%   kableExtra::column_spec(column = c(4,6), width = "1.1cm") %>%   kableExtra::column_spec(column = c(8,9), width = "1.7cm") #%>% kableExtra::landscape(margin="0.75in")
+
+# df <- aggregate(cbind(RecoveryRate,collapsed,longOcc,long_surp,metaAbund)~disturb_lab,data=results,FUN=mean)
+# colnames(df) <- c("Disturbance","Recovery rate","% non-recovery","Occupancy","Relative production","Relative abundance")
+
+#lm(cluster_surprises~network_lab+disturb_lab+dispersal_range+patchScen+stochastic_lab+space_var+temporal_var,data=results)
+
+```
+
+In general, the five recovery regimes spanned a continuum of better (e.g., resilient) to worse recoveries (e.g., long-term critical risks). Overall, the interplay between ecological and disturbance conditions appeared to structure the specific pathway for metapopulation recoveries (Figure S24; Table S2). For example, uniform disturbances always led to resilient recoveries. However, local, even disturbance regimes tended to lead to, at-best, a resilient recovery or, at worst, hidden collapses with the probability modulated by other ecological factors. Local, uneven disturbance regimes led to, at best, a slow recovery or, at worst, a long-term critical risk and non-recovery. The main text Figure 5 and 6 demonstrates the conditions that led to resilient recoveries compared to critical risks, while more intermediate outcomes, like slow recovery, hidden collapses, or lost capacity are shown here in Figures S25-S27.
+
+```{r cluster results, echo=FALSE,warning = FALSE, message = FALSE,fig.height=5,fig.width=8,fig.cap="Frequency of emergent metapopulation recovery regimes can depend on a complex interplay between network structure, dispersal, and spatial disturbances. Ribbon colors denote a group of simulations that led to one of five common recovery outcomes. Frequency of regimes denoted by width of ribbons",fig.align="center"}
+library(ggalluvial)
+surprises <- readRDS(file="Figures/gg_clustering_outcomes.rds")
+gradColour <- colorRampPalette(rev(c("black","#bd0026","#fdae61","dodgerblue","forestgreen")))
+n_id <- sum(surprises$surprise_logic)
+n_resilient <- sum(surprises$surprise_logic[surprises$cluster_surprises=='Resilient'])
+surprises$surprise_index <- ifelse(surprises$cluster_surprises=="Resilient","Expected","Surprised")
+n_outcomes <- (sapply(unique(surprises$cluster_surprises),function(x){sum(surprises$surprise_logic[surprises$cluster_surprises==x])}))
+n_cumul <- c(0,cumsum(n_outcomes))
+n_cumul <- sapply(2:length(n_cumul),function(x){median(c(n_cumul[x],n_cumul[x-1]))})
+margins <- c(0.1,0.1,0.1,0.1)
+p1 <- ggplot(surprises,aes(y = surprise_logic,axis1 = network_lab, axis2 = dispersal_range,axis3=disturb_lab,axis4=cluster_surprises)) +
+      geom_alluvium(aes(fill = cluster_surprises),width = 1/6,reverse=FALSE) +
+      #guides(fill = FALSE) +
+      geom_stratum(width = 1/6,fill="grey",color="white", reverse = FALSE) +
+      geom_text(stat = "stratum",size=2.5, aes(label = after_stat(stratum)), reverse = FALSE) +
+      scale_x_discrete(limits = c("Network structure", "Dispersal","Disturbance","Outcome"),expand=c(0.075,0.075)) +
+      scale_y_continuous(breaks = seq(0,n_id,length.out=5),label = scales::percent_format(scale = 100 / n_id),sec.axis=sec_axis(~./1,breaks = n_cumul,label = paste(round(100*n_outcomes/n_id),"%",sep=""))) +
+      scale_fill_manual(name="Regimes",values=gradColour(n=length(unique(surprises$cluster_surprises)))) +
+      #scale_fill_brewer(type="div",palette="RdYlBu",direction=-1) +
+      theme_minimal() +
+      ylab("Frequency of strata (% of simulations)") +
+      coord_cartesian(clip = "off") +
+      theme(legend.position="bottom",strip.text.x=element_blank(),plot.margin=unit(margins,"line"),text=element_text(size=7),axis.text=element_text(size=7),axis.title=element_text(size=9),legend.text = element_text(size=7)) +
+      ggtitle("Emergent metapopulation recovery regimes")
+p1
+
+```
+### Role of ecological and disturbance conditions on recovery outcomes
+Local patch demography, habitat network structure, dispersal, spatially and temporally correlated recruitment variation, and spatial disturbance regimes each had modulating effects on the probability for any particular recovery regime (Figures 5 & 6 in the main text; and Figures S25-S27 here). There was a clear signal from any localized disturbances, which increased the probability for non-resilient recovery regimes. For habitat networks, metapopulations with linear networks tended to have increased probability for worse recoveries compared to gridded networks. For dispersal rates, metapopulations with low dispersal had increased probability for poor recoveries compared to high dispersal. For local demography, metapopulations with variable local patch demographic rates tended to increased probability for poor recoveries compared to metapopulations composed of homogeneous local patches. For recruitment stochasticity, metapopulations with both high recruitment variation and high spatial-temporal correlations led to increased probability for poor recoveries compared to low variation and low correlations.
+
+```{r conditional probability for slow recovery, echo=FALSE,warning = FALSE, message = FALSE,fig.height=5,fig.width=5,fig.cap="The probability of a slow recovery in metapopulation recoveries depended on the interplay between network structure, dispersal (low≤0.001; high>0.001), spatial disturbances, heterogeneity in local demographic rates ($\\alpha$ is local patch productivity and $\\beta$ is local patch carrying capacity), and spatial-temporal recruitment variation (high=$\\rho$=0.6 and $\\sigma$=0.1; low=$\\rho$≈0 and $\\sigma$= 0.001) based on ordered logistic regression.",fig.align="center"}
+p <- readRDS(file="Figures/Probability of slow recovery in metapopulation recoveries.rds")
+print(p)
+```
+
+```{r conditional probability for hidden collapses, echo=FALSE,warning = FALSE, message = FALSE,fig.height=5,fig.width=5,fig.cap="The probability of hidden local collapses in metapopulation recoveries depended on the interplay between network structure, dispersal (low≤0.001; high>0.001), spatial disturbances, heterogeneity in local demographic rates ($\\alpha$ is local patch productivity and $\\beta$ is local patch carrying capacity), and spatial-temporal recruitment variation (high=$\\rho$=0.6 and $\\sigma$=0.1; low=$\\rho$≈0 and $\\sigma$= 0.001) based on ordered logistic regression.",fig.align="center"}
+p<-readRDS(file="Figures/Probability of hidden collapses in metapopulation recoveries.rds")
+p
+
+```
+
+```{r conditional probability for lost capacity, echo=FALSE,warning = FALSE, message = FALSE,fig.height=5,fig.width=5,fig.cap="The probability of lost productive capacity in metapopulation recoveries depended on the interplay between network structure, dispersal (low≤0.001; high>0.001), spatial disturbances, heterogeneity in local demographic rates ($\\alpha$ is local patch productivity and $\\beta$ is local patch carrying capacity), and spatial-temporal recruitment variation (high=$\\rho$=0.6 and $\\sigma$=0.1; low=$\\rho$≈0 and $\\sigma$= 0.001) based on ordered logistic regression.",fig.align="center"}
+p<-readRDS(file="Figures/Probability of lost capacity in metapopulation recoveries.rds")
+p
+
+```
+
+## References
+\vspace{3truemm}
+<div id="refs"></div>
