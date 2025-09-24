@@ -62,4 +62,89 @@ for (i in 1:ncol(N_df)){
 
 ## Example 2: Rosenzweig-MacArthur Model
 
+The Rosenzweig-MacArthur model is an extended version of the Lotka-Volterra model. It considers density-dependent growth of the prey species, and incorporates a functional response, as developed by Holling.
+
+$
+\frac{dN}{dt} = (b-d)N(1-\frac{n}{k})-\frac{\alpha N}{1+wN}P \\
+\frac{dP}{dt} = P(c\frac{\alpha N}{1+wN}-g)
+$
+
+$b$ is the birth rate of the prey species;
+
+$d$ is the death rate of the prey species;
+
+$k$ is the carrying capacity of the prey species;
+
+$\alpha$ is the predation efficiency;
+
+$w$ measures the degree of predator saturation;
+
+$c$ is the conversion efficiency of the predator;
+
+$g$ is the per capita death rate of the predator.
+
+The Rosenzweig-MacArthur model is a continuous-time model. We can use the package `deSolve` to solve ODEs (ordinary differential equations), as so:
+
+```{r}
+# install.packages(deSolve)
+library(deSolve)
+RosenMacModel <- function(t, y, p){
+  b <- p[1]; d <- p[2]; k <- p[3]; a <- p[4] 
+  w <- p[5]; c <- p[6]; g <- p[7] # Parameters that define the model
+  N <- y[1]; P <- y[2] # State variables (what's changing over time/space, etc.)
+  dN = (b - d)*N*(1 - (N/k)) - (a*N)/(1 + w*N)*P # Prey abundance over time
+  dP = P*(c*(a*N)/(1 + w*N) - g) # Predator abundance over time
+  list(c(dN, dP))
+}
+b <- 2; d <- 1; k <- 1000; a <- 0.005; w <- 0.0025; c <- 2;g <- 2 # Parameter values
+parms <- c(b, d, k, a, w, c, g)
+N0 <- 500; P0 <- 500 # Initial conditions/state of the system
+N0 <- c(N0, P0)
+TT <- seq(0, 100, 0.1) # Time series over which to solve, and with what step size
+results <- lsoda(N0, TT, RosenMacModel, parms, verbose = FALSE)
+RosenMacDet <- data.frame(results); colnames(RosenMacDet) <- c("Time", "N", "P")
+plot(RosenMacDet$Time, RosenMacDet$N, col = "orchid", lwd = 2,
+     type = "l", ylim = c(0, 800),
+     main = "Deterministic Simulation of the Rosenzweig-MacArthur Model", 
+     xlab = "Time", ylab = "Population Abundance")
+lines(RosenMacDet$Time, RosenMacDet$P, col = "cornflowerblue", lwd = 2)
+legend("topright", legend = c("Prey (N)", "Predator (P)"), col = c("orchid", "cornflowerblue"), lwd = 2)
+```
+
+Let's see what happens if we play around with parameter values:
+
+```{r}
+a <- 0.008 # Increase attack rate to 0.008
+parms <- c(b, d, k, a, w, c, g)
+N0 <- 500; P0 <- 500 # Initial conditions/state of the system
+N0 <- c(N0, P0)
+results <- lsoda(N0, TT, RosenMacModel, parms, verbose = FALSE)
+RosenMacDet <- data.frame(results); colnames(RosenMacDet) <- c("Time", "N", "P")
+plot(RosenMacDet$Time, RosenMacDet$N, col = "orchid", lwd = 2,
+     type = "l", ylim = c(0, max(RosenMacDet[ , 2:3])),
+     main = "Deterministic Simulation of the RM Model: Higher Attack Rat", 
+     xlab = "Time", ylab = "Population Abundance")
+lines(RosenMacDet$Time, RosenMacDet$P, col = "cornflowerblue", lwd = 2)
+legend("topright", legend = c("Prey (N)", "Predator (P)"), col = c("orchid", "cornflowerblue"), lwd = 2)
+
+a <- 0.004 # Decrease attack rate to 0.004
+parms <- c(b, d, k, a, w, c, g)
+N0 <- 500; P0 <- 500 # Initial conditions/state of the system
+N0 <- c(N0, P0)
+results <- lsoda(N0, TT, RosenMacModel, parms, verbose = FALSE)
+RosenMacDet <- data.frame(results); colnames(RosenMacDet) <- c("Time", "N", "P")
+plot(RosenMacDet$Time, RosenMacDet$N, col = "orchid", lwd = 2,
+     type = "l", ylim = c(0, max(RosenMacDet[ , 2:3])),
+     main = "Deterministic Simulation of the RM Model: Lower Attack Rate", 
+     xlab = "Time", ylab = "Population Abundance")
+lines(RosenMacDet$Time, RosenMacDet$P, col = "cornflowerblue", lwd = 2)
+legend("topright", legend = c("Prey (N)", "Predator (P)"), col = c("orchid", "cornflowerblue"), lwd = 2)
+```
+
+Notice how the dynamical behaviour of the model changes...
+
 ## Example 3: MacCall et al., 2019 Model
+
+```{r}
+
+```
