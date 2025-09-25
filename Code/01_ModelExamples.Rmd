@@ -118,6 +118,7 @@ a <- 0.008 # Increase attack rate to 0.008
 parms <- c(b, d, k, a, w, c, g)
 N0 <- 500; P0 <- 500 # Initial conditions/state of the system
 N0 <- c(N0, P0)
+TT <- seq(0, 200, 0.1) # Time series over which to solve, and with what step size
 results <- lsoda(N0, TT, RosenMacModel, parms, verbose = FALSE)
 RosenMacDet <- data.frame(results); colnames(RosenMacDet) <- c("Time", "N", "P")
 plot(RosenMacDet$Time, RosenMacDet$N, col = "orchid", lwd = 2,
@@ -131,6 +132,7 @@ a <- 0.004 # Decrease attack rate to 0.004
 parms <- c(b, d, k, a, w, c, g)
 N0 <- 500; P0 <- 500 # Initial conditions/state of the system
 N0 <- c(N0, P0)
+TT <- seq(0, 50, 0.1) # Time series over which to solve, and with what step size
 results <- lsoda(N0, TT, RosenMacModel, parms, verbose = FALSE)
 RosenMacDet <- data.frame(results); colnames(RosenMacDet) <- c("Time", "N", "P")
 plot(RosenMacDet$Time, RosenMacDet$N, col = "orchid", lwd = 2,
@@ -141,9 +143,19 @@ lines(RosenMacDet$Time, RosenMacDet$P, col = "cornflowerblue", lwd = 2)
 legend("topright", legend = c("Prey (N)", "Predator (P)"), col = c("orchid", "cornflowerblue"), lwd = 2)
 ```
 
-Notice how the dynamical behaviour of the model changes...
+Notice how the dynamical behaviour of the model changes... When we increase the attack rate, we see out damped oscillations morph into a stable limit cycle that prevents the population from establishing equilibrium. When we decrease the attack rate, we see the prey population settle at a higher equilibrium value. We can work with the model to find an expression that defines this equilibrium (when $\frac{dN}{dt} = \frac{dP}{dt} = 0$).
 
 ## Example 3: MacCall et al., 2019 Model
+
+MacCall et al. compare two models of the spatial distribution of recruits. In the first model (DIFF), recruits are distributed in fixed proportions among neighbouring habitats and tend to home to those spawning locations without regard to the presence of older fish. In the second model ("Go With the Older Fish", GWOF), recruits join a school of older fish and adopt that school's behaviour. As such, in the GWOF model, recruits adopt spawning sites in proportion to the relative abundances of the older fish using those habitats. In both cases, many recruits return to their natal sites, but the probabilistic nature by which this happens, differs.
+
+MacCall et al. propose meta-population-esque models, whereby we model biomass by site and time. For example, Equation (1) gives spawner biomass at site $i$ at time $t$ ($B_{i, t}$) as a function of adult biomass ($S$), recruit biomass ($R$), and exploitation ($E$) at the previous time step.
+
+$
+(1) B_{i, t} = S_i(\underline B_{t-1}) + R_i(\underline B_{t-1}) - E_{t-1}B_{i,t-1}
+$
+
+In Equation (1), $\underline B_t$ refers to the vector of spawning biomass, over $N$ sites, in year $t$.
 
 ```{r}
 
