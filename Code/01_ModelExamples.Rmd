@@ -64,10 +64,7 @@ for (i in 1:ncol(N_df)){
 
 The Rosenzweig-MacArthur model is an extended version of the Lotka-Volterra model. It considers density-dependent growth of the prey species, and incorporates a functional response, as developed by Holling.
 
-$
-\frac{dN}{dt} = (b-d)N(1-\frac{n}{k})-\frac{\alpha N}{1+wN}P \\
-\frac{dP}{dt} = P(c\frac{\alpha N}{1+wN}-g)
-$
+\$ \frac{dN}{dt} = (b-d)N(1-\frac{n}{k})-\frac{\alpha N}{1+wN}P \\ \frac{dP}{dt} = P(c\frac{\alpha N}{1+wN}-g) \$
 
 $b$ is the birth rate of the prey species;
 
@@ -151,9 +148,7 @@ MacCall et al. compare two models of the spatial distribution of recruits. In th
 
 MacCall et al. propose meta-population-esque models, whereby we model biomass by site and time. For example, Equation (1) gives spawner biomass at site $i$ at time $t$ ($B_{i, t}$) as a function of adult biomass ($S$), recruit biomass ($R$), and exploitation ($E$) at the previous time step.
 
-$
-(1) B_{i, t} = S_i(\underline B_{t-1}) + R_i(\underline B_{t-1}) - E_{t-1}B_{i,t-1}
-$
+\$ (1) B\_{i, t} = S_i(\underline B*{t-1}) + R_i(*\underline B{t-1}) - E\_{t-1}B\_{i,t-1} \$
 
 In Equation (1), $\underline B_t$ refers to the vector of spawning biomass, over $N$ sites, in year $t$.
 
